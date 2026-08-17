@@ -1,0 +1,315 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Dreamland Travels</title>
+  <meta name="description" content="Sign in to your Dreamland Travels account to manage bookings and view invoices.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+  {% include "_headassets.html" %}
+
+  
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-wrap">
+      <div class="loader-compass"></div>
+      <span>DREAMLAND TRAVELS</span>
+    </div>
+  </div>
+
+  {% include "_navbar.html" %}
+
+  <section class="auth-wrap" style="background-image: linear-gradient(rgba(15,76,129,.88),rgba(10,55,96,.92)), url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1600&auto=format&fit=crop'); background-size:cover; background-position:center;">
+    <div class="glass-card auth-card">
+      <!-- Sign In Section -->
+      <div id="login-section">
+        <div class="text-center mb-4">
+          <span class="eyebrow justify-content-center">Welcome Back</span>
+          <h2 class="mt-2">Sign In to Continue</h2>
+          <p class="lead-note">Access your bookings, invoices, and saved trips.</p>
+        </div>
+        <form method="POST" action="{% url 'login' %}">
+          {% csrf_token %}  
+          {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+          {% endif %}
+          <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <div class="input-icon-wrap"><i class="bi bi-envelope"></i><input type="email" name="email" class="form-control" placeholder="you@example.com" required></div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-icon-wrap"><i class="bi bi-lock"></i><input type="password" name="password" class="form-control" placeholder="Enter your password" required><button type="button" class="toggle-pw"><i class="bi bi-eye"></i></button></div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe">
+              <label class="form-check-label" for="rememberMe">Remember Me</label>
+            </div>
+            <a href="#" id="forgot-password-trigger" class="link-accent small">Forgot Password?</a>
+          </div>
+          <button type="submit" class="btn btn-accent w-100" style="color: white;">Login <i class="bi bi-box-arrow-in-right ms-1"></i></button>
+          <div class="form-ui-alert d-none small text-center mt-3" style="color:#B9F6CA;"><i class="bi bi-check-circle me-1"></i> Signed in! Redirecting to your dashboard...</div>
+          <p class="text-center mt-4 mb-0" style="color:rgba(255,255,255,.75);">New to Dreamland? <a href="{% url 'register' %}" class="link-accent">Create an account</a></p>
+        </form>
+      </div>
+
+      <!-- Forgot Password Section -->
+      <div id="forgot-password-section" class="d-none">
+        <div class="text-center mb-4">
+          <span class="eyebrow justify-content-center">Reset Password</span>
+          <h2 class="mt-2">Forgot Password?</h2>
+          <p class="lead-note">Enter your details and verify OTP to reset your password.</p>
+        </div>
+        <form id="forgot-password-form">
+          {% csrf_token %}
+          <div id="reset-alert" class="alert d-none"></div>
+
+          <div class="mb-3">
+            <label class="form-label">Enter Your Email</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-envelope"></i>
+              <input type="email" id="reset-email" class="form-control" placeholder="you@example.com" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">New Password</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-lock"></i>
+              <input type="password" id="reset-password" class="form-control" placeholder="Enter New Password" required>
+              <button type="button" class="toggle-pw"><i class="bi bi-eye"></i></button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Confirm Password</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-lock-fill"></i>
+              <input type="password" id="reset-confirm-password" class="form-control" placeholder="Confirm New Password" required>
+              <button type="button" class="toggle-pw"><i class="bi bi-eye"></i></button>
+            </div>
+          </div>
+
+          <div id="otp-field-container" class="mb-3 d-none">
+            <label class="form-label">Enter OTP</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-shield-lock"></i>
+              <input type="text" id="reset-otp" class="form-control" placeholder="Enter 6-digit OTP" maxlength="6" pattern="\d{6}">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <button type="button" id="send-otp-btn" class="btn btn-accent w-100">Send OTP <i class="bi bi-envelope-fill ms-1"></i></button>
+            <button type="button" id="reset-password-btn" class="btn btn-accent w-100 d-none">Reset Password <i class="bi bi-check-circle ms-1"></i></button>
+          </div>
+
+          <p class="text-center mt-4 mb-0" style="color:rgba(255,255,255,.75);">
+            <a href="#" id="edit-reset-fields-btn" class="link-accent small d-none">Change Email / Password</a>
+            <span id="edit-reset-fields-br" class="d-none"><br></span>
+            Remembered your password? <a href="#" id="back-to-login-btn" class="link-accent">Sign In</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  {% include "_footer.html" %}
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const forgotPasswordLink = document.getElementById('forgot-password-trigger');
+      const loginSection = document.getElementById('login-section');
+      const forgotPasswordSection = document.getElementById('forgot-password-section');
+      const backToLoginBtn = document.getElementById('back-to-login-btn');
+      
+      const sendOtpBtn = document.getElementById('send-otp-btn');
+      const resetPasswordBtn = document.getElementById('reset-password-btn');
+      const otpContainer = document.getElementById('otp-field-container');
+      const resetEmail = document.getElementById('reset-email');
+      const resetPassword = document.getElementById('reset-password');
+      const resetConfirmPassword = document.getElementById('reset-confirm-password');
+      const resetOtp = document.getElementById('reset-otp');
+      const resetAlert = document.getElementById('reset-alert');
+      
+      const editBtn = document.getElementById('edit-reset-fields-btn');
+      const editBr = document.getElementById('edit-reset-fields-br');
+
+      const csrfToken = document.querySelector('#forgot-password-form [name=csrfmiddlewaretoken]').value;
+
+      function showAlert(msg, type) {
+        resetAlert.textContent = msg;
+        resetAlert.className = `alert alert-${type} mb-3`;
+      }
+
+      function hideAlert() {
+        resetAlert.className = 'alert d-none';
+      }
+
+      // Switch to forgot password section
+      if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          loginSection.classList.add('d-none');
+          forgotPasswordSection.classList.remove('d-none');
+          hideAlert();
+        });
+      }
+
+      // Switch back to login section
+      if (backToLoginBtn) {
+        backToLoginBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          forgotPasswordSection.classList.add('d-none');
+          loginSection.classList.remove('d-none');
+          hideAlert();
+        });
+      }
+
+      // Allow editing fields again
+      if (editBtn) {
+        editBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          resetEmail.removeAttribute('readonly');
+          resetPassword.removeAttribute('readonly');
+          resetConfirmPassword.removeAttribute('readonly');
+          
+          otpContainer.classList.add('d-none');
+          resetPasswordBtn.classList.add('d-none');
+          sendOtpBtn.classList.remove('d-none');
+          editBtn.classList.add('d-none');
+          editBr.classList.add('d-none');
+        });
+      }
+
+      // Handle Send OTP click
+      if (sendOtpBtn) {
+        sendOtpBtn.addEventListener('click', function () {
+          hideAlert();
+          const email = resetEmail.value.trim();
+          const password = resetPassword.value.trim();
+          const confirmPassword = resetConfirmPassword.value.trim();
+
+          if (!email || !password || !confirmPassword) {
+            showAlert('All fields are required.', 'danger');
+            return;
+          }
+
+          if (password !== confirmPassword) {
+            showAlert('Passwords do not match.', 'danger');
+            return;
+          }
+
+          sendOtpBtn.disabled = true;
+          sendOtpBtn.innerHTML = 'Sending... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+          fetch("{% url 'password_reset_send_otp' %}", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password,
+              confirm_password: confirmPassword
+            })
+          })
+          .then(response => response.json().then(data => ({ status: response.status, body: data })))
+          .then(res => {
+            sendOtpBtn.disabled = false;
+            sendOtpBtn.innerHTML = 'Send OTP <i class="bi bi-envelope-fill ms-1"></i>';
+            
+            if (res.status === 200 && res.body.success) {
+              showAlert(res.body.message, 'success');
+              
+              // Set inputs to readonly
+              resetEmail.setAttribute('readonly', true);
+              resetPassword.setAttribute('readonly', true);
+              resetConfirmPassword.setAttribute('readonly', true);
+              
+              // Toggle buttons
+              sendOtpBtn.classList.add('d-none');
+              otpContainer.classList.remove('d-none');
+              resetPasswordBtn.classList.remove('d-none');
+              editBtn.classList.remove('d-none');
+              editBr.classList.remove('d-none');
+            } else {
+              showAlert(res.body.error || 'An error occurred. Please try again.', 'danger');
+            }
+          })
+          .catch(err => {
+            sendOtpBtn.disabled = false;
+            sendOtpBtn.innerHTML = 'Send OTP <i class="bi bi-envelope-fill ms-1"></i>';
+            showAlert('Failed to connect to the server.', 'danger');
+          });
+        });
+      }
+
+      // Handle Reset Password click
+      if (resetPasswordBtn) {
+        resetPasswordBtn.addEventListener('click', function () {
+          hideAlert();
+          const email = resetEmail.value.trim();
+          const password = resetPassword.value.trim();
+          const confirmPassword = resetConfirmPassword.value.trim();
+          const otp = resetOtp.value.trim();
+
+          if (!otp) {
+            showAlert('Please enter the OTP.', 'danger');
+            return;
+          }
+
+          resetPasswordBtn.disabled = true;
+          resetPasswordBtn.innerHTML = 'Resetting... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+          fetch("{% url 'password_reset_verify' %}", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password,
+              confirm_password: confirmPassword,
+              otp: otp
+            })
+          })
+          .then(response => response.json().then(data => ({ status: response.status, body: data })))
+          .then(res => {
+            resetPasswordBtn.disabled = false;
+            resetPasswordBtn.innerHTML = 'Reset Password <i class="bi bi-check-circle ms-1"></i>';
+            
+            if (res.status === 200 && res.body.success) {
+              window.location.href = res.body.redirect_url;
+            } else {
+              showAlert(res.body.error || 'An error occurred. Please try again.', 'danger');
+            }
+          })
+          .catch(err => {
+            resetPasswordBtn.disabled = false;
+            resetPasswordBtn.innerHTML = 'Reset Password <i class="bi bi-check-circle ms-1"></i>';
+            showAlert('Failed to connect to the server.', 'danger');
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

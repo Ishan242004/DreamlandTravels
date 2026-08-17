@@ -1,0 +1,316 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Management | Dreamland Travels</title>
+  <meta name="description" content="Review customer ratings and feedback.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+  {% include "_headassets.html" %}
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-wrap">
+      <div class="loader-compass"></div>
+      <span>DREAMLAND TRAVELS</span>
+    </div>
+  </div>
+
+  <div class="dash-shell">
+  <aside class="dash-sidebar">
+    <div class="profile-mini">
+      <img src="{% static 'images/admin-profile.png' %}" alt="Administrator">
+      <h6>Administrator</h6>
+      <small>Dreamland Travels</small>
+    </div>
+    <nav class="dash-nav">
+      <a href="{% url 'admin_dashboard' %}" class="">Dashboard</a>
+      <a href="{% url 'manage_packages' %}" class="">Manage Packages</a>
+      <a href="{% url 'add_package' %}" class="">Add Package</a>
+      <a href="{% url 'manage_users' %}" class="">Manage Users</a>
+      <a href="{% url 'manage_bookings' %}" class="">Manage Bookings</a>
+      <a href="{% url 'admin_payments' %}" class="">Payments</a>
+      <a href="{% url 'admin_contact_messages' %}" class="">Contact Messages</a>
+      <a href="{% url 'admin_feedback' %}" class="active">Feedback</a>
+      <a href="{% url 'user_logout' %}" class="logout-link">Logout</a>
+    </nav>
+  </aside>
+
+  <main class="dash-main">
+    <div class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button id="sidebar-toggle-btn" class="btn btn-brand-outline btn-sm"><i class="bi bi-list"></i></button>
+        <a href="{% url 'admin_dashboard' %}" class="fw-bold text-dark text-decoration-none fs-5">Feedback</a>
+      </div>
+      <div class="admin-top-actions">
+        <div class="dropdown">
+          <button class="admin-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span>Administrator</span>
+            <i class="bi bi-chevron-down ms-1"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end admin-profile-menu">
+            <li class="admin-profile-header">
+              <div>
+                <strong>Administrator</strong>
+                <small>Dreamland Travels</small>
+              </div>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'admin_profile' %}"><i class="bi bi-person me-2"></i> Admin Profile</a></li>
+            <li><a class="dropdown-item logout-item" href="{% url 'user_logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <h4 class="mb-0 fw-bold text-primary-brand">Feedback Management</h4>
+      <small class="text-muted">Review customer reviews and rating scores.</small>
+    </div>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <!-- Summary Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card reveal">
+            <div class="stat-ic" style="background:#00B4D8;"><i class="bi bi-chat-square-text"></i></div>
+            <div>
+              <h3>{{ total_reviews }}</h3>
+              <small>Total Reviews</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card reveal" style="border-left: 4px solid #A9740A;">
+            <div class="stat-ic" style="background:#A9740A;"><i class="bi bi-star-fill text-white"></i></div>
+            <div>
+              <h3>{{ avg_rating }} / 5.0</h3>
+              <small>Average Rating</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card reveal" style="border-left: 4px solid #1E9E4A;">
+            <div class="stat-ic" style="background:#1E9E4A;"><i class="bi bi-patch-check"></i></div>
+            <div>
+              <h3>{{ five_star_reviews }}</h3>
+              <small>5 Star Reviews</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card reveal" style="border-left: 4px solid #0d6efd;">
+            <div class="stat-ic" style="background:#0d6efd;"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+              <h3>{{ pending_reviews }}</h3>
+              <small>Pending Reviews</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Search -->
+      <div class="dash-panel mb-4 p-3">
+        <form method="GET" action="{% url 'admin_feedback' %}" class="row g-2 align-items-end">
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label small fw-semibold text-muted">Search Reviews</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+              <input type="text" name="search" class="form-control border-start-0 bg-light" placeholder="Search customer, package, keyword..." value="{{ search_query }}">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-6">
+            <label class="form-label small fw-semibold text-muted">Filter by Package</label>
+            <select name="package" class="form-select form-select-sm bg-light">
+              <option value="">All Packages</option>
+              {% for p in packages %}
+                <option value="{{ p.id }}" {% if package_filter == p.id|stringformat:"i" %}selected{% endif %}>{{ p.package_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-lg-2 col-md-3 col-sm-6">
+            <label class="form-label small fw-semibold text-muted">Rating</label>
+            <select name="rating" class="form-select form-select-sm bg-light">
+              <option value="">All Ratings</option>
+              <option value="5" {% if rating_filter == "5" %}selected{% endif %}>★★★★★ (5)</option>
+              <option value="4" {% if rating_filter == "4" %}selected{% endif %}>★★★★☆ (4)</option>
+              <option value="3" {% if rating_filter == "3" %}selected{% endif %}>★★★☆☆ (3)</option>
+              <option value="2" {% if rating_filter == "2" %}selected{% endif %}>★★☆☆☆ (2)</option>
+              <option value="1" {% if rating_filter == "1" %}selected{% endif %}>★☆☆☆☆ (1)</option>
+            </select>
+          </div>
+          <div class="col-lg-1.5 col-md-3 col-sm-6 flex-grow-1">
+            <label class="form-label small fw-semibold text-muted">Sort By</label>
+            <select name="sort" class="form-select form-select-sm bg-light">
+              <option value="-created_at" {% if sort_by == "-created_at" %}selected{% endif %}>Newest First</option>
+              <option value="created_at" {% if sort_by == "created_at" %}selected{% endif %}>Oldest First</option>
+              <option value="-rating" {% if sort_by == "-rating" %}selected{% endif %}>Rating: High to Low</option>
+              <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>Rating: Low to High</option>
+            </select>
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-sm btn-brand px-3"><i class="bi bi-funnel-fill me-1"></i>Filter</button>
+            <a href="{% url 'admin_feedback' %}" class="btn btn-sm btn-light border px-2"><i class="bi bi-x-lg"></i></a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Feedback Table -->
+      <div class="dash-panel">
+        <div class="table-responsive">
+          <table class="table table-dreamland align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Feedback ID</th>
+                <th>Booking ID</th>
+                <th>Traveler Details</th>
+                <th>Package Name</th>
+                <th>Rating</th>
+                <th>Review Title</th>
+                <th>Date Submitted</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for f in feedbacks %}
+                <tr>
+                  <td>FB-{{ f.id }}</td>
+                  <td>
+                    {% if f.booking %}
+                      <span class="fw-semibold">DT-{{ f.booking.id }}</span>
+                    {% else %}
+                      <span class="text-muted">—</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div class="fw-semibold">{{ f.user.first_name|default:f.user.username }}</div>
+                    <small class="text-muted">{{ f.user.email }}</small>
+                  </td>
+                  <td>
+                    <div class="fw-semibold">{{ f.package.package_name }}</div>
+                    <small class="text-muted">{{ f.package.destination }}</small>
+                  </td>
+                  <td>
+                    <span class="text-warning">
+                      {% for i in "12345" %}
+                        {% if forloop.counter <= f.rating %}
+                          <i class="bi bi-star-fill"></i>
+                        {% else %}
+                          <i class="bi bi-star"></i>
+                        {% endif %}
+                      {% endfor %}
+                    </span>
+                  </td>
+                  <td>{{ f.title|default:"Trip Review" }}</td>
+                  <td>{{ f.created_at|date:"M d, Y H:i" }}</td>
+                  <td class="text-end">
+                    <div class="d-flex justify-content-end gap-1">
+                      <button class="btn btn-sm btn-brand-outline btn-sm-pill" 
+                              title="View Feedback"
+                              data-bs-toggle="modal" 
+                              data-bs-target="#fbModal{{ f.id }}">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                      <form method="POST" action="{% url 'delete_feedback' f.id %}" onsubmit="return confirm('Delete this feedback permanently?');" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger btn-sm-pill" title="Delete Feedback">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+
+                    <!-- Details Modal -->
+                    <div class="modal fade" id="fbModal{{ f.id }}" tabindex="-1" aria-hidden="true" style="text-align: left;">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content border-0 shadow">
+                          <div class="modal-header bg-soft py-3">
+                            <h6 class="modal-title fw-bold"><i class="bi bi-chat-square-quote me-2 text-primary"></i>Feedback Details - FB-{{ f.id }}</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body p-4">
+                            <div class="row g-3">
+                              <!-- Left Column -->
+                              <div class="col-md-5 border-end">
+                                <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Feedback Details</h6>
+                                <div class="mb-2"><strong>Feedback ID:</strong> <span>FB-{{ f.id }}</span></div>
+                                <div class="mb-2"><strong>Booking ID:</strong> 
+                                  <span>
+                                    {% if f.booking %}DT-{{ f.booking.id }}{% else %}Not Linked{% endif %}
+                                  </span>
+                                </div>
+                                <div class="mb-2"><strong>Traveler Name:</strong> <span>{{ f.user.first_name|default:f.user.username }}</span></div>
+                                <div class="mb-2"><strong>User Email:</strong> <span>{{ f.user.email }}</span></div>
+                                <div class="mb-2"><strong>Package Name:</strong> <span>{{ f.package.package_name }}</span></div>
+                                <div class="mb-2"><strong>Destination:</strong> <span>{{ f.package.destination }}</span></div>
+                                <div class="mb-2"><strong>Submission Date:</strong> <span>{{ f.created_at|date:"F d, Y H:i:s" }}</span></div>
+                                <div class="mb-2"><strong>Rating:</strong>
+                                  <div class="text-warning fs-5">
+                                    {% for i in "12345" %}
+                                      {% if forloop.counter <= f.rating %}
+                                        <i class="bi bi-star-fill"></i>
+                                      {% else %}
+                                        <i class="bi bi-star"></i>
+                                      {% endif %}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- Right Column -->
+                              <div class="col-md-7 ps-md-4">
+                                <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Review Content</h6>
+                                <div class="mb-3">
+                                  <strong>Review Title:</strong>
+                                  <h5 class="fw-bold text-dark mt-1">{{ f.title|default:"Trip Review" }}</h5>
+                                </div>
+                                <div class="mb-2">
+                                  <strong>Review Comments:</strong>
+                                  <div class="p-3 bg-light rounded-3 font-monospace text-secondary mt-1" style="white-space: pre-wrap; font-size: 0.9rem;">{{ f.review }}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer bg-light py-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                            <form method="POST" action="{% url 'delete_feedback' f.id %}" onsubmit="return confirm('Delete this feedback permanently?');" class="d-inline">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash me-1"></i>Delete Feedback</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="8" class="text-center py-5 text-muted">
+                    <i class="bi bi-chat-left-quote fs-1 d-block mb-2"></i>
+                    No feedback found matching the criteria.
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

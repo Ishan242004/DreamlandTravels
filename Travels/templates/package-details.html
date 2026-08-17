@@ -1,0 +1,167 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Santorini Escape — Package Details | Dreamland Travels</title>
+  <meta name="description" content="Full itinerary, gallery, hotel and pricing details for the Santorini Escape package.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+  {% include "_headassets.html" %}
+
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-wrap">
+      <div class="loader-compass"></div>
+      <span>DREAMLAND TRAVELS</span>
+    </div>
+  </div>
+
+  {% include "_navbar.html" with active="packages" %}
+
+  <header class="page-header" style="background-image: linear-gradient(rgba(10,37,64,.4),rgba(10,37,64,.4)), url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=1800&auto=format&fit=crop');">
+    <div class="container content text-center">
+      <div class="d-flex justify-content-center mb-3">
+        <nav class="breadcrumb-dreamland">
+          <a href="{% url 'index' %}">Home</a> <i class="bi bi-chevron-right small"></i> <span class="active-crumb">Package Details</span>
+        </nav>
+      </div>
+      <h1>Package Details</h1>
+    </div>
+  </header>
+  <section class="section">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-8">
+          <div class="gallery-hero reveal">
+            <img id="gallery-main-img"
+            src="{{ package.image.url }}"
+            alt="{{ package.package_name }}">
+          </div>
+          <div class="gallery-thumbs">
+            <img src="{{ package.image.url }}" alt="{{ package.package_name }}">
+            {% for img in package.gallery_images.all %}
+            <img src="{{ img.image.url }}" alt="{{ package.package_name }}">
+            {% endfor %}
+          </div>
+
+          <div class="mt-5">
+            <span class="eyebrow">{{ package.days }} Days / {{ package.nights }} Nights</span>  
+            <h1 class="mt-2 mb-3" style="font-size:2.2rem;">
+              {{ package.package_name }}
+            </h1>
+            <div class="d-flex flex-wrap gap-4 mb-4 text-ink-soft">
+              <span><i class="bi bi-geo-alt-fill text-secondary-brand"></i>{{ package.destination }}</span>
+              <span><i class="bi bi-star-fill text-accent-brand"></i>{{package.reviews}}</span>
+              <span><i class="bi bi-building text-secondary-brand"></i>{{ package.hotel }}</span>
+              <span><i class="bi bi-bus-front text-secondary-brand"></i> {{ package.bus }}</span>
+            </div>
+            <p>{{ package.description }}</p>
+          </div>
+
+          <!-- Itinerary -->
+          <div class="mt-5">
+            <h4 class="mb-4 font-display text-primary-brand" style="font-size: 1.6rem;"><i class="bi bi-calendar3 me-2 text-secondary-brand"></i>Day-wise Itinerary</h4>
+            <div class="itinerary-timeline">
+              {% for d in itinerary_list %}
+                <div class="itinerary-item reveal mb-3">
+                  <div class="itinerary-day-badge">
+                    {{ d.day_num }}
+                  </div>
+                  <div class="itinerary-content shadow-sm">
+                    <h5 class="fw-bold text-primary-brand mb-2">
+                      Day {{ d.day_num }}{% if d.title %}: {{ d.title }}{% endif %}
+                    </h5>
+                    <p class="mb-0 text-ink-soft" style="white-space: pre-line;">{{ d.description }}</p>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="alert alert-info">No detailed itinerary available for this package.</div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Included / Excluded -->
+          <div class="row mt-5 g-4">
+            <div class="col-md-6">
+              <h5 class="mb-3">Included Facilities</h5>
+              <ul class="list-unstyled include-list">
+                <li>{{ package.included|linebreaks }}</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h5 class="mb-3">Excluded Facilities</h5>
+              <ul class="list-unstyled exclude-list">
+                <li> Travel insurance</li>
+                <li> Lunches &amp; personal expenses</li>
+                <li> Optional spa &amp; cooking class</li>
+                <li> Visa fees (if applicable)</li>
+              </ul>
+            </div>
+            {% comment %} <div class="col-md-6">
+                  <h5 class="mb-3">Excluded Facilities</h5>
+
+                  <ul class="list-unstyled exclude-list">
+                      {% for item in package.excluded|splitlines %}
+                          {% if item %}
+                          <li>
+                              <i class="bi bi-x-circle-fill"></i>
+                              {{ item }}
+                          </li>
+                          {% endif %}
+                      {% endfor %}
+                  </ul>
+              </div> {% endcomment %}
+          </div>
+        </div>
+
+        <!-- Booking Summary -->
+        <div class="col-lg-4">
+            <div class="booking-summary-card reveal">
+                <h5 class="mb-3">Booking Summary</h5>
+                <div class="mb-3"><h6 class="mb-1">{{ package.package_name }}</h6><small class="text-muted">
+                        {{ package.days }} Days / {{ package.nights }} Nights
+                    </small>
+                </div>
+                <div class="price-line"><span><i class="bi bi-geo-alt"></i> Destination</span>
+                    <span>{{ package.destination }}</span>
+                </div>
+                <div class="price-line"><span><i class="bi bi-building"></i> Hotel</span>
+                    <span>{{ package.hotel }}</span>
+                </div>
+                <div class="price-line"><span><i class="bi bi-bus-front"></i> Transport</span>
+                    <span>AC Volvo Bus</span>
+                </div>
+                <hr>
+                <div class="price-line"><span>Price Per Person</span>
+                    <span>₹ {{ package.price }}</span>
+                </div>
+                <div class="price-line"><span>Cancellation</span>
+                    <span class="text-success">Free</span>
+                </div>
+                <a href="{% url 'booking' package.id %}" class="btn btn-brand w-100 mt-4">Book Now</a>
+                <div class="text-center mt-3"><small class="text-secondary-brand">
+                        <i class="bi bi-shield-check"></i>
+                        Free cancellation up to 7 days before travel
+                    </small>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include "_footer.html" %}
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  
+</body>
+</html>

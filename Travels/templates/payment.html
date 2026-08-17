@@ -1,0 +1,255 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Payment | Dreamland Travels</title>
+  <meta name="description" content="Choose a payment method and complete your booking for Dreamland Travels — UI demo only.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+  {% include "_headassets.html" %}
+
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-wrap">
+      <div class="loader-compass"></div>
+      <span>DREAMLAND TRAVELS</span>
+    </div>
+  </div>
+  <input type="hidden" id="booking_id" value="{{ booking.id }}">
+
+  {% include "_navbar.html" with active="packages" solid=True %}
+
+  <header class="page-header" style="background-image: linear-gradient(rgba(10,37,64,.4),rgba(10,37,64,.4)), url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=1800&auto=format&fit=crop');">
+    <div class="container content text-center">
+      <div class="d-flex justify-content-center mb-3">
+        <nav class="breadcrumb-dreamland">
+          <a href="{% url 'index' %}">Home</a> <i class="bi bi-chevron-right small"></i> <span class="active-crumb">Secure Payment</span>
+        </nav>
+      </div>
+      <h1>Secure Payment</h1>
+    </div>
+  </header>
+  <section class="section">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-7">
+          <div class="surface-card p-4 reveal">
+            <h5 class="mb-4"><i class="bi bi-credit-card text-secondary-brand me-2"></i>Payment Method</h5>
+
+            {% comment %} <label class="payment-method-card active-method" data-method-option="card">
+              <input type="radio" name="payment_method" value="Credit Card" checked>
+              <i class="bi bi-credit-card-2-front"></i>
+              <div><strong>Credit Card</strong><br><small class="text-muted">Visa, Mastercard, American Express</small></div>
+            </label>
+            <label class="payment-method-card" data-method-option="card">
+              <input type="radio" name="payment_method" value="Debit Card">
+              <i class="bi bi-credit-card"></i>
+              <div><strong>Debit Card</strong><br><small class="text-muted">All major banks supported</small></div>
+            </label>
+            <label class="payment-method-card" data-method-option="upi">
+              <input type="radio" name="payment_method" value="UPI">
+              <i class="bi bi-phone"></i>
+              <div><strong>UPI</strong><br><small class="text-muted">Pay using any UPI app</small></div>
+            </label>
+            <label class="payment-method-card" data-method-option="netbanking">
+              <input type="radio" name="payment_method" value="Net Banking">
+              <i class="bi bi-bank"></i>
+              <div><strong>Net Banking</strong><br><small class="text-muted">All major banks supported</small></div>
+            </label> {% endcomment %}
+            <label class="payment-method-card" data-method-option="wallet">
+              <input type="radio" name="payment_method" value="Wallet">
+              <i class="bi bi-wallet2"></i>
+              <div><strong>Wallet</strong><br><small class="text-muted">PayPal, Apple Pay, Google Pay</small></div>
+            </label>
+            {% comment %}
+            <div class="method-detail-panel mt-4" data-panel="card">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Card Number</label>
+                  <input type="text" class="form-control" placeholder="1234 5678 9012 3456" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Cardholder Name</label>
+                  <input type="text" class="form-control" placeholder="Full name on card" disabled>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Expiry</label>
+                  <input type="text" class="form-control" placeholder="MM/YY" disabled>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">CVV</label>
+                  <input type="text" class="form-control" placeholder="123" disabled>
+                </div>
+              </div>
+            </div>
+            <div class="method-detail-panel mt-4 d-none" data-panel="upi">
+              <label class="form-label">UPI ID</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="yourname@upi" disabled>
+                <button class="btn btn-brand-outline" type="button" disabled>Verify</button>
+              </div>
+            </div>
+            <div class="method-detail-panel mt-4 d-none" data-panel="netbanking">
+              <label class="form-label">Select Your Bank</label>
+              <select class="form-select" disabled>
+                <option>State Bank of India</option>
+                <option>HDFC Bank</option>
+                <option>ICICI Bank</option>
+                <option>Axis Bank</option>
+              </select>
+            </div> {% endcomment %}
+            <div class="method-detail-panel mt-4" data-panel="wallet">
+              <label class="form-label">Select Wallet</label>
+              <select class="form-select">
+                <option>Paytm</option>
+                <option>PhonePe</option>
+                <option>Google Pay</option>
+                <option>Amazon Pay</option>
+              </select>
+            </div>
+            <p class="small text-muted mt-2"><i class="bi bi-info-circle me-1"></i>You'll enter these details securely in the payment window that opens next.</p>
+
+            {% comment %} <form method="POST" class="mt-4">
+              {% csrf_token %}
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Card Number</label>
+                  <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Cardholder Name</label>
+                  <input type="text" class="form-control" placeholder="Full name on card" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Expiry</label>
+                  <input type="text" class="form-control" placeholder="MM/YY" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">CVV</label>
+                  <input type="text" class="form-control" placeholder="123" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-brand w-100 mt-4"><i class="bi bi-lock-fill me-1"></i> Pay Now &mdash; {{ total }}</button>
+              {% comment %} <p class="text-center small text-muted mt-3 mb-0"><i class="bi bi-shield-lock"></i> This is a UI demo — no real payment is processed.</p> {% endcomment %}
+            {% comment %} </form> {% endcomment %} 
+            <form id="payment-form" class="mt-4">
+              {% csrf_token %}
+
+              <input type="hidden" id="amount" value="{{ total }}">
+              <input type="hidden" id="order_id" value="{{ razorpay_order_id }}">
+
+              <button type="button"
+                      id="rzp-button"
+                      class="btn btn-brand w-100 mt-4">
+                  <i class="bi bi-lock-fill me-1"></i>
+                  Pay Securely — ₹{{ total }}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="booking-summary-card reveal reveal-delay-1">
+            <div class="mb-3">
+              <h6>{{ package.package_name }}</h6>
+              <p class="text-muted mb-1">
+              {{ package.destination }}
+              </p>
+              <p class="small">
+              {{ package.days }} Days /
+              {{ package.nights }} Nights
+              </p>
+            </div>
+            <h5 class="mb-3">Payment Summary</h5>
+            <div class="price-line"><span>Package Price</span><span> ₹{{ package.price }}</span></div>
+            <div class="price-line"><span>Persons * {{ persons }}</span><span>₹{{ subtotal }}</span></div>
+            <div class="price-line"><span>Taxes &amp; Fees</span><span>₹{{ taxes }}</span></div>
+            {% comment %} <div class="price-line"><span>Coupon Discount</span><span class="text-success">-$0</span></div> {% endcomment %}
+            <div class="price-total"><span>Total Payable</span><span>₹{{ total }}</span></div>
+            <div class="d-flex align-items-center gap-2 mt-4 p-3 rounded-3" style="background:rgba(0,180,216,.08);">
+              <i class="bi bi-shield-check text-secondary-brand fs-4"></i>
+              <small class="mb-0">Your payment details are encrypted and never stored on our servers.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+  var options = {
+      "key": "{{ razorpay_key }}",
+      "amount": "{{ total_paise }}",
+      "currency": "INR",
+      "name": "Dreamland Travels",
+      "description": "Package Booking",
+      "image": "{% static 'images/logo.png' %}",
+
+      "order_id": "{{ razorpay_order_id }}",
+
+      "handler": function (response) {
+
+          const selectedMethodEl = document.querySelector('input[name="payment_method"]:checked');
+          const methodVal = selectedMethodEl ? selectedMethodEl.value : 'Credit Card';
+
+          fetch("{% url 'payment_success' %}", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRFToken": "{{ csrf_token }}"
+              },
+              body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
+                  booking_id: document.getElementById("booking_id").value,
+                  payment_method: methodVal
+              })
+          })
+          .then(res => res.json())
+          .then(data => {
+              if(data.status=="success"){
+                  window.location.href="{% url 'confirmation' %}?booking_id={{ booking.id }}";
+              }
+              else{
+                  alert("Payment verification failed.");
+              }
+          });
+
+      },
+
+      "prefill": {
+          "name": "{{ request.user.get_full_name }}",
+          "email": "{{ request.user.email }}",
+          "contact": "{{ profile.phone }}"
+      },
+
+      "theme": {
+          "color": "#0d6efd"
+      }
+  };
+
+  var rzp = new Razorpay(options);
+
+  document.getElementById('rzp-button').onclick = function(e){
+      rzp.open();
+      e.preventDefault();
+  }
+  </script>
+
+  {% include "_footer.html" %}
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  
+</body>
+</html>

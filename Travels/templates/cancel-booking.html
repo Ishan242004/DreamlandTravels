@@ -1,0 +1,87 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cancel Booking | Dreamland Travels</title>
+  <meta name="description" content="Review your booking, cancellation policy, and estimated refund before confirming cancellation.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+  {% include "_headassets.html" %}
+
+  
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-wrap">
+      <div class="loader-compass"></div>
+      <span>DREAMLAND TRAVELS</span>
+    </div>
+  </div>
+
+  {% include "_navbar.html" with solid=True %}
+
+  <header class="page-header" style="background-image: linear-gradient(rgba(10,37,64,.4),rgba(10,37,64,.4)), url('https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=1800&auto=format&fit=crop');">
+    <div class="container content text-center">
+      <div class="d-flex justify-content-center mb-3">
+        <nav class="breadcrumb-dreamland">
+          <a href="{% url 'index' %}">Home</a> <i class="bi bi-chevron-right small"></i> <span class="active-crumb">Cancel Booking</span>
+        </nav>
+      </div>
+      <h1>Cancel Booking</h1>
+    </div>
+  </header>
+  <section class="section">
+    <div class="container">
+      <div class="row justify-content-center g-4">
+        <div class="col-lg-7">
+          <div class="surface-card p-4 reveal">
+            <h5 class="mb-4"><i class="bi bi-x-octagon text-danger me-2"></i>Booking Details</h5>
+            <div class="d-flex gap-3 mb-4">
+              <img src="{{ booking.package.image.url }}" class="rounded-3" style="width:90px;height:90px;object-fit:cover;" alt="{{ booking.package.package_name }}">
+              <div>
+                <h6 class="mb-1">{{ booking.package.package_name }}</h6>
+                <small class="text-muted d-block"><i class="bi bi-calendar3"></i> Travel Date: {{ booking.travel_date|date:"M d, Y"|default:"Not set" }}</small>
+                <small class="text-muted d-block"><i class="bi bi-people"></i> {{ booking.persons }} Traveler{{ booking.persons|pluralize }}</small>
+                <span class="badge-status badge-upcoming mt-1 d-inline-block">{{ booking.status }}</span>
+              </div>
+            </div>
+            <hr>
+            <h6 class="mb-3">Cancellation Policy</h6>
+            <ul class="small text-muted">
+              <li class="mb-2">Cancel 15+ days before travel: 90% refund</li>
+              <li class="mb-2">Cancel 7&ndash;14 days before travel: 50% refund</li>
+              <li class="mb-2">Cancel within 7 days: non-refundable</li>
+            </ul>
+            <form method="POST" action="{% url 'cancel_booking' booking.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger w-100 mt-3">Confirm Cancellation</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="booking-summary-card reveal reveal-delay-1">
+            <h5 class="mb-3">Booking Summary</h5>
+            <div class="price-line"><span>Amount Paid</span><span>₹{{ booking.amount }}</span></div>
+            <div class="price-line"><span>Booking Status</span><span>{{ booking.status }}</span></div>
+            <p class="small text-muted mt-3 mb-0">Cancellations are subject to our refund policy above. Refunds are processed to the original payment method within 5&ndash;7 business days.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include "_footer.html" %}
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  
+</body>
+</html>

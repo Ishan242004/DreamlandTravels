@@ -1,0 +1,401 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Your Trip | Dreamland Travels</title>
+  <meta name="description" content="Complete your traveler details and review your booking summary before payment.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+  {% include "_headassets.html" %}
+
+  
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-wrap">
+      <div class="loader-compass"></div>
+      <span>DREAMLAND TRAVELS</span>
+    </div>
+  </div>
+
+  {% include "_navbar.html" with active="packages" solid=True %}
+
+  <header class="page-header" style="background-image: linear-gradient(rgba(10,37,64,.4),rgba(10,37,64,.4)), url('https://images.unsplash.com/photo-1499591934245-40b55745b905?q=80&w=1800&auto=format&fit=crop');">
+    <div class="container content text-center">
+      <div class="d-flex justify-content-center mb-3">
+        <nav class="breadcrumb-dreamland">
+          <a href="{% url 'index' %}">Home</a> <i class="bi bi-chevron-right small"></i> <span class="active-crumb">Book Your Trip</span>
+        </nav>
+      </div>
+      <h1>Book Your Trip</h1>
+    </div>
+  </header>
+  <section class="section">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Left Column: Traveler Details Form -->
+        <div class="col-lg-7">
+          <div class="surface-card p-4 p-md-5 reveal shadow-sm" style="border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+            <h4 class="mb-4 text-primary-brand fw-bold">
+              <i class="bi bi-person-fill text-secondary-brand me-2"></i>Traveler Details
+            </h4>
+            <p class="text-muted small mb-4">Please fill in the information below to complete your booking reservation.</p>
+            
+            <form method="POST" action="{% url 'booking' package.id %}" id="booking-form">
+              {% csrf_token %}
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark">Package Name</label>
+                  <input type="text" class="form-control bg-light" value="{{ package.package_name }}" readonly style="border: 1px solid var(--color-border);">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark">Number of Travelers</label>
+                  <input type="number" class="form-control" id="persons" name="persons" min="1" value="{{ persons }}" required style="border: 1px solid var(--color-border);">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark">Travel Date</label>
+                  <input type="date" name="travel_date" class="form-control" required style="border: 1px solid var(--color-border);">
+                </div>
+                
+                <div class="col-12"><hr class="my-3 text-muted opacity-25"></div>
+                
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark">Full Name</label>
+                  <input type="text" class="form-control" name="full_name" value="{{ request.user.first_name }}" required placeholder="e.g. John Doe" style="border: 1px solid var(--color-border);">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark">Email Address</label>
+                  <input type="email" name="email" id="booking-email" class="form-control" value="{{ request.user.email }}" required placeholder="yourname@example.com" style="border: 1px solid var(--color-border);">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark">Phone Number</label>
+                  <input type="tel" name="phone" class="form-control" value="{{ profile.phone_no }}" required placeholder="e.g. +1234567890" style="border: 1px solid var(--color-border);">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark">Room Preference</label>
+                  <select class="form-select" style="border: 1px solid var(--color-border);">
+                    <option>Ocean View Double</option>
+                    <option>Suite with Private Pool</option>
+                    <option>Standard Double</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold text-dark">Special Requests</label>
+                  <textarea class="form-control" rows="3" placeholder="Dietary needs, celebrations, accessibility requests, etc." style="border: 1px solid var(--color-border);"></textarea>
+                </div>
+              </div>
+              
+              <!-- Submit Button & Verification Alert -->
+              <div class="mt-4">
+                <button type="submit" id="submit-booking-btn" class="btn btn-brand w-100 py-3 fw-bold shadow-sm" style="font-size: 1.05rem; transition: all 0.3s ease;">
+                  <i class="bi bi-check-circle me-1"></i> Submit Booking
+                </button>
+                <div class="text-center mt-3 text-muted small d-none" id="submit-booking-note">
+                  <i class="bi bi-info-circle me-1 text-primary-brand"></i>Please verify your email address using OTP to complete the booking.
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column: Trip Info, Price Breakdown & OTP -->
+        <div class="col-lg-5">
+          <!-- OTP verification panel (initially hidden) -->
+          <div class="surface-card p-4 mb-4 reveal shadow-sm d-none" id="otp-verification-sidebar" style="border: 2px solid var(--color-secondary); border-radius: var(--radius-md); background: rgba(0, 180, 216, 0.02);">
+            <h5 class="mb-2 text-primary-brand fw-bold">
+              <i class="bi bi-shield-check text-secondary-brand me-2"></i>Email Verification
+            </h5>
+            <p class="text-muted small mb-4">A secure one-time passcode (OTP) will be sent to confirm your email before registration/booking completion.</p>
+            
+            <!-- Step 1: Send OTP -->
+            <div id="otp-step-1">
+              <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Verify Email Address</label>
+                <input type="email" id="otp-email" class="form-control" placeholder="yourname@example.com" required style="border: 1px solid var(--color-border);">
+              </div>
+              <button type="button" class="btn btn-brand-outline w-100 py-2 fw-semibold" id="send-otp-btn">Send OTP Code</button>
+              <div id="otp-send-status" class="small mt-2 text-success d-none fw-semibold"></div>
+              <div id="otp-error-status" class="small mt-2 text-danger d-none fw-semibold"></div>
+            </div>
+
+            <!-- Step 2: Enter OTP (initially hidden) -->
+            <div id="otp-step-2" class="d-none mt-3 pt-3 border-top">
+              <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Enter 6-Digit OTP</label>
+                <input type="text" id="otp-code" class="form-control text-center fw-bold fs-5 py-2" placeholder="••••••" maxlength="6" style="letter-spacing: 0.3em; border: 1px solid var(--color-border);">
+              </div>
+              <button type="button" class="btn btn-brand w-100 py-2 fw-semibold" id="verify-otp-btn">Verify OTP</button>
+              <div id="otp-verify-status" class="small mt-2 text-success d-none fw-semibold"></div>
+              <div id="otp-verify-error" class="small mt-2 text-danger d-none fw-semibold"></div>
+            </div>
+          </div>
+
+          <!-- Trip & Price Summary Card -->
+          <div class="surface-card p-4 reveal shadow-sm" style="border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+            <h5 class="mb-4 text-primary-brand fw-bold">
+              <i class="bi bi-journal-text text-secondary-brand me-2"></i>Trip Summary
+            </h5>
+            
+            <!-- Package Info -->
+            <div class="d-flex gap-3 mb-4 pb-4 border-bottom align-items-center">
+              {% if package.image %}
+              <img src="{{ package.image.url }}" class="rounded-3 shadow-sm" style="width:100px; height:100px; object-fit:cover; flex-shrink:0; border: 1px solid var(--color-border);" alt="{{ package.package_name }}">
+              {% endif %}
+              <div>
+                <h6 class="mb-1 fw-bold text-dark fs-6">{{ package.package_name }}</h6>
+                <div class="text-muted small mb-1"><i class="bi bi-geo-alt me-1 text-secondary-brand"></i>{{ package.destination }}</div>
+                <div class="text-muted small mb-1"><i class="bi bi-calendar3 me-1 text-secondary-brand"></i>{{ package.days }} Days / {{ package.nights }} Nights</div>
+                <div class="text-muted small"><i class="bi bi-building me-1 text-secondary-brand"></i>{{ package.hotel }} &nbsp; <i class="bi bi-bus-front me-1 text-secondary-brand"></i>{{ package.bus }}</div>
+              </div>
+            </div>
+            
+            <!-- Price Breakdown -->
+            <h6 class="fw-bold mb-3 text-primary-brand"><i class="bi bi-receipt text-secondary-brand me-2"></i>Price Breakdown</h6>
+            <div class="d-flex justify-content-between mb-2 small text-muted">
+              <span>Package Price (per person)</span>
+              <span class="fw-semibold text-dark">₹{{ package.price }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2 small text-muted">
+              <span>Travelers</span>
+              <span class="fw-semibold text-dark"><span class="summary-travelers">{{ persons }}</span></span>
+            </div>
+            <div class="d-flex justify-content-between mb-2 small text-muted">
+              <span>Subtotal</span>
+              <span class="fw-semibold text-dark"><span class="summary-subtotal">₹{{ subtotal }}</span></span>
+            </div>
+            <div class="d-flex justify-content-between mb-3 pb-3 border-bottom small text-muted">
+              <span>Taxes &amp; Fees (Flat Rate)</span>
+              <span class="fw-semibold text-dark">₹{{ taxes }}</span>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center pt-2">
+              <span class="fw-bold text-dark">Total Amount</span>
+              <span class="fw-bold text-primary-brand fs-4"><span class="summary-total">₹{{ total }}</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% include "_footer.html" %}
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const bookingForm = document.getElementById('booking-form');
+      const submitBookingBtn = document.getElementById('submit-booking-btn');
+      
+      const otpSidebar = document.getElementById('otp-verification-sidebar');
+      const sendOtpBtn = document.getElementById('send-otp-btn');
+      const verifyOtpBtn = document.getElementById('verify-otp-btn');
+      
+      const travelerEmailInput = document.getElementById('booking-email');
+      const otpEmailInput = document.getElementById('otp-email');
+      const otpCodeInput = document.getElementById('otp-code');
+      const otpStep2Container = document.getElementById('otp-step-2');
+      
+      const otpSendStatus = document.getElementById('otp-send-status');
+      const otpErrorStatus = document.getElementById('otp-error-status');
+      const otpVerifyStatus = document.getElementById('otp-verify-status');
+      const otpVerifyError = document.getElementById('otp-verify-error');
+      
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      let emailVerified = false;
+
+      // Set minimum travel date to today
+      const travelDateInput = document.querySelector('input[name="travel_date"]');
+      if (travelDateInput) {
+        const todayStr = new Date().toISOString().split('T')[0];
+        travelDateInput.setAttribute('min', todayStr);
+      }
+
+      // Reactive price summary update
+      const personsInput = document.getElementById('persons');
+      const basePrice = parseFloat("{{ package.price }}");
+      const flatTax = parseFloat("{{ taxes }}");
+      
+      function updatePrices() {
+        const count = parseInt(personsInput.value) || 1;
+        const subtotal = basePrice * count;
+        const total = subtotal + flatTax;
+        
+        document.querySelectorAll('.summary-travelers').forEach(el => el.textContent = count);
+        document.querySelectorAll('.summary-subtotal').forEach(el => el.textContent = '₹' + subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+        document.querySelectorAll('.summary-total').forEach(el => el.textContent = '₹' + total.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+      }
+      
+      if (personsInput) {
+        personsInput.addEventListener('input', updatePrices);
+        personsInput.addEventListener('change', updatePrices);
+        updatePrices(); // Initial sync
+      }
+      
+      // Intercept booking details form submission
+      bookingForm.addEventListener('submit', function(e) {
+        if (!emailVerified) {
+          e.preventDefault(); // stop form submission
+          
+          // Reveal OTP sidebar
+          otpSidebar.classList.remove('d-none');
+          
+          // Prefill OTP email with entered traveler email
+          const currentEmail = travelerEmailInput.value.trim();
+          if (currentEmail) {
+            otpEmailInput.value = currentEmail;
+          }
+          
+          // Scroll into view on mobile
+          otpSidebar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          
+          // Flash OTP card border to highlight it
+          otpSidebar.style.borderColor = 'var(--color-primary)';
+          setTimeout(() => {
+            otpSidebar.style.borderColor = 'var(--color-border)';
+          }, 1500);
+        }
+      });
+      
+      // Send OTP
+      sendOtpBtn.addEventListener('click', function() {
+        const email = otpEmailInput.value.trim();
+        if (!email) {
+          showError(otpErrorStatus, 'Please enter a valid email address.');
+          return;
+        }
+        
+        hideMessage(otpSendStatus);
+        hideMessage(otpErrorStatus);
+        
+        sendOtpBtn.disabled = true;
+        sendOtpBtn.textContent = 'Sending...';
+        
+        fetch('/api/booking/send-otp/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+          },
+          body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(res => {
+          if (res.status === 200 && res.body.success) {
+            showSuccess(otpSendStatus, res.body.message || 'OTP sent successfully.');
+            otpStep2Container.classList.remove('d-none');
+            startResendTimer();
+          } else {
+            showError(otpErrorStatus, res.body.error || 'Failed to send OTP. Please try again.');
+            sendOtpBtn.disabled = false;
+            sendOtpBtn.textContent = 'Send OTP Code';
+          }
+        })
+        .catch(err => {
+          showError(otpErrorStatus, 'Failed to send OTP. Please try again.');
+          sendOtpBtn.disabled = false;
+          sendOtpBtn.textContent = 'Send OTP Code';
+        });
+      });
+      
+      // Verify OTP
+      verifyOtpBtn.addEventListener('click', function() {
+        const email = otpEmailInput.value.trim();
+        const otp = otpCodeInput.value.trim();
+        
+        if (!otp || otp.length !== 6) {
+          showError(otpVerifyError, 'Please enter a 6-digit OTP.');
+          return;
+        }
+        
+        hideMessage(otpVerifyStatus);
+        hideMessage(otpVerifyError);
+        
+        verifyOtpBtn.disabled = true;
+        verifyOtpBtn.textContent = 'Verifying...';
+        
+        fetch('/api/booking/verify-otp/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+          },
+          body: JSON.stringify({ email: email, otp: otp })
+        })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(res => {
+          if (res.status === 200 && res.body.success) {
+            showSuccess(otpVerifyStatus, 'Email verified successfully! Completing booking...');
+            emailVerified = true;
+            
+            // Sync verified email back to the main booking details form and lock it
+            travelerEmailInput.value = email;
+            travelerEmailInput.readOnly = true;
+            
+            // Lock OTP inputs
+            otpEmailInput.readOnly = true;
+            sendOtpBtn.disabled = true;
+            verifyOtpBtn.classList.add('d-none');
+            otpCodeInput.disabled = true;
+            
+            // Submit form automatically
+            setTimeout(() => {
+              bookingForm.submit();
+            }, 1000);
+          } else {
+            showError(otpVerifyError, res.body.error || 'Verification failed. Please check the code.');
+            verifyOtpBtn.disabled = false;
+            verifyOtpBtn.textContent = 'Verify OTP';
+          }
+        })
+        .catch(err => {
+          showError(otpVerifyError, 'An error occurred during verification.');
+          verifyOtpBtn.disabled = false;
+          verifyOtpBtn.textContent = 'Verify OTP';
+        });
+      });
+      
+      let timerInterval;
+      function startResendTimer() {
+        let timeLeft = 60;
+        sendOtpBtn.disabled = true;
+        
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            sendOtpBtn.disabled = false;
+            sendOtpBtn.textContent = 'Resend OTP Code';
+          } else {
+            sendOtpBtn.textContent = `Resend in ${timeLeft}s`;
+          }
+        }, 1000);
+      }
+      
+      function showSuccess(element, msg) {
+        element.textContent = msg;
+        element.classList.remove('d-none');
+      }
+      
+      function showError(element, msg) {
+        element.textContent = msg;
+        element.classList.remove('d-none');
+      }
+      
+      function hideMessage(element) {
+        element.textContent = '';
+        element.classList.add('d-none');
+      }
+    });
+  </script>
+</body>
+</html>
+
+

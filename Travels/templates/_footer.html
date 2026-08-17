@@ -1,0 +1,72 @@
+<!-- Footer -->
+<footer class="footer-dreamland">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand"><i class="bi bi-compass"></i> Dreamland Travels</div>
+        <p class="text-white-50">Curating rare, unforgettable journeys since 2011 &mdash; luxury travel planning with a personal touch, for explorers who want more than a trip.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-twitter-x"></i></a>
+          <a href="#"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6 col-6">
+        <h6>Quick Links</h6>
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'about' %}">About Us</a></li>
+          <li><a href="{% url 'packages' %}">Packages</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+          <li><a href="{% url 'feedback' %}">Feedback</a></li>
+        </ul>
+      </div>
+      {% comment %} <div class="col-lg-3 col-md-6 col-6">
+        <h6>Popular Packages</h6>
+        <ul>
+          <li><a href="{% url 'packages' %}">Santorini Escape</a></li>
+          <li><a href="{% url 'packages' %}">Swiss Alps Retreat</a></li>
+          <li><a href="{% url 'packages' %}">Bali Honeymoon</a></li>
+          <li><a href="{% url 'packages' %}">Kerala Backwaters</a></li>
+        </ul>
+      </div> {% endcomment %}
+      <div class="col-lg-3 col-md-6 col-6">
+        <h6>Popular Packages</h6>
+        <ul>
+            {% for package in footer_packages %}
+                <li>
+                    <a href="{% url 'package_details' package.id %}" class="text-decoration-none">
+                        {{ package.package_name }}
+                    </a>
+                </li>
+            {% empty %}
+                <li>No packages available</li>
+            {% endfor %}
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <h6>Contact</h6>
+        <div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>204 Horizon Tower, Marine Drive, Mumbai, India</span></div>
+        <div class="footer-contact-item"><i class="bi bi-telephone"></i><span>+91 98765 43210</span></div>
+        <div class="footer-contact-item"><i class="bi bi-envelope"></i><span>hello@dreamlandtravels.com</span></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="mt-4 mb-2">
+          <h6 class="mb-2">Newsletter</h6>
+          <form class="d-flex newsletter-input-group" data-ui-only>
+            <input type="email" class="form-control" placeholder="Your email address" required>
+            <button class="btn btn-accent" type="submit" style="color: white;"><i class="bi bi-send" ></i></button>
+          </form>
+          <div class="form-ui-alert d-none small text-accent-brand mt-2">Thanks for subscribing! Watch your inbox for dreamy destinations.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <span>&copy; 2026 Dreamland Travels. All rights reserved.</span>
+      <span class="d-flex gap-3"><a href="#" class="text-white-50">Privacy Policy</a><a href="#" class="text-white-50">Terms of Service</a></span>
+    </div>
+  </div>
+</footer>
