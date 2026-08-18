@@ -132,23 +132,23 @@
       <!-- Filters & Search -->
       <div class="dash-panel mb-4 p-3">
         <form method="GET" action="{% url 'admin_payments' %}" class="row g-2 align-items-end">
-          <div class="col-lg-3 col-md-6">
+          <div class="col-lg-4 col-md-6">
             <label class="form-label small fw-semibold text-muted">Search Payments</label>
             <div class="input-group input-group-sm">
               <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
               <input type="text" name="search" class="form-control border-start-0 bg-light" placeholder="TXN ID, name, email, booking..." value="{{ search_query }}">
             </div>
           </div>
-          <div class="col-lg-2 col-md-3 col-sm-6">
+          <div class="col-lg-3 col-md-3 col-sm-6">
             <label class="form-label small fw-semibold text-muted">Payment Status</label>
             <select name="status" class="form-select form-select-sm bg-light">
               <option value="">All Statuses</option>
-              <option value="Successful" {% if status_filter == "Successful" %}selected{% endif %}>Successful</option>
+              <option value="Successful" {%  if status_filter == "Successful" %}selected{% endif %}>Successful</option>
               <option value="Pending" {% if status_filter == "Pending" %}selected{% endif %}>Pending</option>
               <option value="Failed" {% if status_filter == "Failed" %}selected{% endif %}>Failed</option>
             </select>
           </div>
-          <div class="col-lg-2 col-md-3 col-sm-6">
+          <div class="col-lg-3 col-md-3 col-sm-6">
             <label class="form-label small fw-semibold text-muted">Payment Method</label>
             <select name="method" class="form-select form-select-sm bg-light">
               <option value="">All Methods</option>

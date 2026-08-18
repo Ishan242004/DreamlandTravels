@@ -123,14 +123,14 @@
       <!-- Filters & Search -->
       <div class="dash-panel mb-4 p-3">
         <form method="GET" action="{% url 'admin_contact_messages' %}" class="row g-2 align-items-end">
-          <div class="col-md-6">
+          <div class="col-md-5">
             <label class="form-label small fw-semibold text-muted">Search Messages</label>
             <div class="input-group input-group-sm">
               <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
               <input type="text" name="search" class="form-control border-start-0 bg-light" placeholder="Search by name, email, subject, message content..." value="{{ search_query }}">
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label class="form-label small fw-semibold text-muted">Status</label>
             <select name="status" class="form-select form-select-sm bg-light">
               <option value="">All Statuses</option>
@@ -139,7 +139,7 @@
               <option value="Replied" {% if status_filter == "Replied" %}selected{% endif %}>Replied</option>
             </select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label small fw-semibold text-muted">Sort By</label>
             <select name="sort" class="form-select form-select-sm bg-light">
               <option value="-created_at" {% if sort_by == "-created_at" %}selected{% endif %}>Newest First</option>
