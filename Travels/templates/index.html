@@ -9,7 +9,31 @@
   <meta name="description" content="Dreamland Travels — curated luxury tours, hand-picked destinations and effortless trip planning.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
   {% include "_headassets.html" %}
-  
+<style>
+  /* Typing cursor */
+  .typing-cursor {
+      display: inline-block;
+      margin-left: 2px;
+      animation: blink 0.7s infinite;
+  }
+
+  /* Cursor blink animation */
+  @keyframes blink {
+      0%, 50% {
+          opacity: 1;
+      }
+
+      51%, 100% {
+          opacity: 0;
+      }
+  }
+
+  /* Initially second cursor hide */
+  #cursor-2 {
+      display: none;
+  }
+
+</style>
 </head>
 <body>
 
@@ -30,7 +54,12 @@
       <div class="row">
         <div class="col-lg-8">
           {% comment %} <span class="eyebrow">Curated Journeys Since 2011</span> {% endcomment %}
-          <h1 class="hero-title">Wander further into <em>dreamland</em>, one unforgettable trip at a time</h1>
+          {% comment %} <h1 class="hero-title">Wander further into <em>dreamland</em>, one unforgettable trip at a time</h1> {% endcomment %}
+          <h1 class="hero-title">
+              Wander further into 
+              <em id="dreamland-text"></em><span class="typing-cursor" id="cursor-1"></span>,
+              <span id="trip-text"></span><span class="typing-cursor" id="cursor-2"></span>
+          </h1>
           <p class="hero-lead">Hand-picked luxury getaways, private guides and effortless planning &mdash; so the only decision left is where to look next.</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
             {% comment %} <a href="{% url 'packages' %}" class="btn btn-accent"><i class="bi bi-compass me-1"></i> Explore Packages</a>
@@ -458,4 +487,43 @@ document.addEventListener("DOMContentLoaded", function () {
 </script> {% endcomment %}
 
 </body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dreamlandText = "dreamland";
+    const tripText = "one unforgettable trip at a time";
+    const dreamlandElement = document.getElementById("dreamland-text");
+    const tripElement = document.getElementById("trip-text");
+    const cursor1 = document.getElementById("cursor-1");
+    const cursor2 = document.getElementById("cursor-2");
+
+    let i = 0;
+    function typeDreamland() {
+        if (i < dreamlandText.length) {
+            dreamlandElement.textContent += dreamlandText.charAt(i);
+            i++;
+            setTimeout(typeDreamland, 120);
+        } else {
+            /* First typing complete */
+            setTimeout(function () {
+                cursor1.style.display = "none";
+                cursor2.style.display = "inline-block";
+                typeTrip();
+            }, 500);
+        }
+    }
+    function typeTrip() {
+        let j = 0;
+        function typing() {
+            if (j < tripText.length) {
+                tripElement.textContent += tripText.charAt(j);
+                j++;
+                setTimeout(typing, 65);
+            }
+        }
+        typing();
+    }
+    /* Animation Start */
+    setTimeout(typeDreamland, 400);
+});
+</script>
 </html>

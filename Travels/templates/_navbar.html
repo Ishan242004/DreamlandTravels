@@ -22,12 +22,17 @@
                         href="{% url 'feedback' %}">Feedback</a></li>
             </ul>
             <div class="d-flex align-items-center gap-2">
+                <!-- Language Selector -->
+                <div class="google-translate d-flex align-items-center">
+                    <div id="google_translate_element"></div>
+                </div>
 
                 {% if request.session.admin %}
 
                 <a href="{% url 'admin_dashboard' %}" class="btn btn-nav-outline btn-sm">
                     <i class="bi bi-speedometer2 me-1"></i> Admin Dashboard
                 </a>
+                
 
                 {% elif user.is_authenticated %}
 
