@@ -10,7 +10,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
   {% include "_headassets.html" %}
 <style>
-  /* Typing cursor */
+  {% comment %} /* Typing cursor */
   .typing-cursor {
       display: inline-block;
       margin-left: 2px;
@@ -26,12 +26,12 @@
       51%, 100% {
           opacity: 0;
       }
-  }
+  }{% endcomment %}
 
   /* Initially second cursor hide */
   #cursor-2 {
       display: none;
-  }
+  } 
 
 </style>
 </head>
@@ -54,12 +54,12 @@
       <div class="row">
         <div class="col-lg-8">
           {% comment %} <span class="eyebrow">Curated Journeys Since 2011</span> {% endcomment %}
-          {% comment %} <h1 class="hero-title">Wander further into <em>dreamland</em>, one unforgettable trip at a time</h1> {% endcomment %}
-          <h1 class="hero-title">
+          <h1 class="hero-title">Wander further into <em>dreamland</em>, one unforgettable trip at a time</h1>
+          {% comment %} <h1 class="hero-title">
               Wander further into 
               <em id="dreamland-text"></em><span class="typing-cursor" id="cursor-1"></span>,
               <span id="trip-text"></span><span class="typing-cursor" id="cursor-2"></span>
-          </h1>
+          </h1> {% endcomment %}
           <p class="hero-lead">Hand-picked luxury getaways, private guides and effortless planning &mdash; so the only decision left is where to look next.</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
             {% comment %} <a href="{% url 'packages' %}" class="btn btn-accent"><i class="bi bi-compass me-1"></i> Explore Packages</a>
