@@ -191,6 +191,19 @@ The project loads configurations from a `.env` file placed at the root directory
 3. **Gmail App Password:** When setting up Gmail SMTP, do not use your standard login password. Enable 2-Step Verification and generate a dedicated **App Password** from your Google Account settings.
 
 ---
+## Screenshots
+
+### 1. Login Page
+
+![Login Page](Docs/images/Login.png)
+
+### 2. Home Page
+
+![Home Page](Docs/images/Home.png)
+
+### 3. Admin Dashboard
+
+![Admin Dashboard](Docs/images/Admin.png)
 
 ## License
 License information has not yet been specified.
