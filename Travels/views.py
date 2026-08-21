@@ -757,6 +757,14 @@ def packages(request):
     else:
         packages = packages.order_by('-created_at')
 
+    unique_packages = (
+        Package.objects
+        .values_list("package_name", flat=True)
+        .distinct()
+        .order_by("package_name")
+    )
+
+
     context = {
         "packages": packages,
         "destination": destination,
@@ -764,6 +772,8 @@ def packages(request):
         "category": category,
         "budget": budget,
         "sort_by": sort_by,
+        "unique_packages": unique_packages,
+
     }
     return render(request, "packages.html", context)
 

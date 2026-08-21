@@ -9,7 +9,41 @@
   <meta name="description" content="Browse Dreamland Travels' curated luxury tour packages across 120+ destinations worldwide.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
   {% include "_headassets.html" %}
-  
+  <style>
+    #filter-form .row {
+        align-items: center;
+    }
+
+    #filter-form [data-filter-group] {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 10px;
+    }
+
+    #filter-form .filter-pill {
+        height: 42px;
+        padding: 0 28px;
+        border: 1px solid #e0e7ef;
+        border-radius: 32px;
+        background: #fff;
+        color: #36516f;
+        font-size: 16px;
+        white-space: nowrap;
+    }
+
+    #filter-form .filter-pill.active {
+        background: #145b94;
+        border-color: #145b94;
+        color: #fff;
+    }
+
+    #filter-form .form-select {
+        height: 40px;
+        border-radius: 9px;
+    }
+  </style>
 </head>
 <body>
   <!-- Page Loader -->
@@ -45,11 +79,14 @@
           <input type="hidden" name="category" id="category-input" value="{{ category|default:'All' }}">
 
           <div class="row g-3 align-items-center">
-            <div class="col-lg-5">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-                <input type="text" name="search" class="form-control border-start-0" placeholder="Search destination, package name..." value="{{ search_query|default:'' }}">
-              </div>
+            <div class="col-lg-4 col-md-6">
+              <label class="form-label">Package</label>
+              <select name="destination" class="form-select">
+                <option value="">All Packages</option>
+                {% for pkg in unique_packages %}
+                    <option value="{{ pkg }}">{{ pkg }}</option>
+                {% endfor %}
+              </select>
             </div>
             <div class="col-lg-4">
               <div class="d-flex flex-wrap gap-2" data-filter-group>
@@ -60,7 +97,8 @@
                 <button type="button" class="filter-pill {% if category == 'Cultural' %}active{% endif %}" onclick="submitCategory('Cultural')">Cultural</button>
               </div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-4">
+              <label class="form-label">Sort By</label>
               <select class="form-select" name="sort" onchange="document.getElementById('filter-form').submit()">
                 <option value="" {% if not sort_by %}selected{% endif %}>Sort by: Default</option>
                 <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
@@ -137,7 +175,7 @@
             {% endfor %}
             </div>
         </div>
-      </div>
+      </section>
 
       <!-- Pagination -->
       <nav class="d-flex justify-content-center mt-5" aria-label="Package pages">
