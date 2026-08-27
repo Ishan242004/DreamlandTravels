@@ -57,7 +57,9 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold text-dark">Travel Date</label>
-                  <input type="date" name="travel_date" class="form-control" required style="border: 1px solid var(--color-border);">
+                  <input type="date" name="travel_date" class="form-control" required 
+                         min="{{ min_date }}" max="{{ max_date }}" 
+                         style="border: 1px solid var(--color-border);">
                 </div>
                 
                 <div class="col-12"><hr class="my-3 text-muted opacity-25"></div>
@@ -210,11 +212,18 @@
       const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       let emailVerified = false;
 
-      // Set minimum travel date to today
+      // Validate travel date calendar selection against booked dates
       const travelDateInput = document.querySelector('input[name="travel_date"]');
+      const bookedDates = JSON.parse('{{ booked_dates_json|safe }}');
+      
       if (travelDateInput) {
-        const todayStr = new Date().toISOString().split('T')[0];
-        travelDateInput.setAttribute('min', todayStr);
+        travelDateInput.addEventListener('change', function() {
+          const selected = this.value;
+          if (bookedDates.includes(selected)) {
+            alert("This date is already fully booked. Please select a different travel date.");
+            this.value = ''; // Reset the input
+          }
+        });
       }
 
       // Reactive price summary update

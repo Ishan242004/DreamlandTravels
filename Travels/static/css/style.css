@@ -1054,3 +1054,159 @@ a { text-decoration: none; color: inherit; }
 .admin-top-actions > * {
     flex-shrink: 0;
 }
+
+/* Custom Cropped Logo Badge Styling */
+.navbar-brand .brand-mark-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(10, 55, 96, 0.15);
+  transition: all 0.4s var(--ease);
+}
+.navbar-brand .brand-mark-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.navbar-brand:hover .brand-mark-img {
+  transform: rotate(15deg) scale(1.06);
+  box-shadow: 0 6px 16px rgba(10, 55, 96, 0.25);
+}
+
+.footer-brand .footer-brand-mark-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s var(--ease);
+}
+.footer-brand .footer-brand-mark-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.footer-brand:hover .footer-brand-mark-img {
+  transform: rotate(15deg) scale(1.06);
+}
+
+.invoice-brand-mark-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(15, 76, 129, 0.12);
+}
+.invoice-brand-mark-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Brand Text & Tagline Metallic CSS Styling */
+.brand-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.brand-title {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  font-size: 1.45rem;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  display: inline-flex;
+  gap: 3px;
+  transition: all 0.3s var(--ease);
+}
+
+.text-dreamland {
+  background: linear-gradient(
+    to bottom,
+    #FFFFFF 0%,
+    #E0F7FA 25%,
+    #00B4D8 55%,
+    #0F4C81 85%,
+    #0A3760 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0.5px rgba(15, 76, 129, 0.7);
+  filter: drop-shadow(0 2px 2px rgba(10, 36, 60, 0.4));
+}
+
+.text-travels {
+  background: linear-gradient(
+    to bottom,
+    #FFFFFF 0%,
+    #E0F7FA 25%,
+    #00B4D8 55%,
+    #0F4C81 85%,
+    #0A3760 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0.5px rgba(15, 76, 129, 0.7);
+  filter: drop-shadow(0 2px 2px rgba(10, 36, 60, 0.4));
+}
+
+.brand-tagline {
+  font-family: var(--font-body) !important;
+  font-weight: 700 !important;
+  font-size: 0.55rem;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: linear-gradient(
+    to bottom,
+    #FFFFFF 0%,
+    #FFD166 50%,
+    #0F4C81 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0.1px rgba(15, 76, 129, 0.4);
+  filter: drop-shadow(0 1px 1px rgba(10, 36, 60, 0.3));
+  margin-top: 2px;
+  display: inline-block;
+}
+
+.navbar-brand:hover .brand-title {
+  transform: translateY(-0.5px);
+}
+.navbar-brand:hover .text-dreamland {
+  filter: drop-shadow(0 3px 5px rgba(15, 76, 129, 0.6));
+}
+.navbar-brand:hover .text-travels {
+  filter: drop-shadow(0 3px 5px rgba(15, 76, 129, 0.6));
+}
+
+/* High-contrast tagline styling on light backgrounds (scrolled navbar, solid navbar, and print invoice) */
+.navbar-dreamland.scrolled .brand-tagline,
+.navbar-dreamland.solid .brand-tagline,
+.invoice-brand .brand-tagline {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  color: var(--color-ink-soft) !important;
+  -webkit-text-stroke: none !important;
+  filter: none !important;
+  font-weight: 800 !important;
+  opacity: 0.95;
+}
+
+
+

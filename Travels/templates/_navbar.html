@@ -1,9 +1,15 @@
+{% load static %}
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg fixed-top navbar-dreamland{% if solid %} solid{% endif %}">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <span class="brand-mark"><i class="bi bi-compass"></i></span>
-            Dreamland Travels
+        <a class="navbar-brand py-1" href="{% url 'index' %}">
+            <span class="brand-mark-img">
+                <img src="{% static 'images/logo-icon.png' %}" alt="Dreamland Travels Icon">
+            </span>
+            <div class="brand-text-wrapper">
+                <span class="brand-title"><span class="text-dreamland">Dreamland</span><span class="text-travels">Travels</span></span>
+                <span class="brand-tagline">JOURNEY BEYOND THE ORDINARY</span>
+            </div>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <i class="bi bi-list"></i>

@@ -277,6 +277,25 @@ def booking(request, id):
     package = get_object_or_404(Package, id=id)
     profile = UserProfile.objects.get(user=request.user)
 
+    from datetime import date, datetime, timedelta
+
+    # 1. Calculate available travel dates (next 3 weeks / 21 days from today)
+    today = date.today()
+    three_weeks_later = today + timedelta(days=20)
+
+    # 2. Exclude dates that already have an active booking for this package
+    booked_dates = Booking.objects.filter(
+        package=package,
+        travel_date__range=[today, three_weeks_later]
+    ).exclude(status="Cancelled").values_list('travel_date', flat=True)
+    booked_dates_set = set(booked_dates)
+
+    available_dates = []
+    for i in range(21):
+        d = today + timedelta(days=i)
+        if d not in booked_dates_set:
+            available_dates.append(d)
+
     if request.method == "POST":
         email = request.POST.get("email", "").strip()
 
@@ -289,7 +308,22 @@ def booking(request, id):
         persons = max(1, persons)
         full_name = request.POST.get("full_name")
         phone = request.POST.get("phone")
-        travel_date = request.POST.get("travel_date") or None
+        travel_date_str = request.POST.get("travel_date")
+
+        if not travel_date_str:
+            messages.error(request, "Please select a travel date.")
+            return redirect("booking", id=id)
+
+        try:
+            selected_date = datetime.strptime(travel_date_str, "%Y-%m-%d").date()
+        except ValueError:
+            messages.error(request, "Invalid date format.")
+            return redirect("booking", id=id)
+
+        # 3. Secure backend validation to ensure the date is allowed
+        if selected_date < today or selected_date > three_weeks_later or selected_date in booked_dates_set:
+            messages.error(request, "The selected date is not available. Please choose another date.")
+            return redirect("booking", id=id)
 
         taxes = TAX_AMOUNT
         subtotal = package.price * persons
@@ -304,7 +338,7 @@ def booking(request, id):
             persons=persons,
             amount=total,
             status="Pending Payment",
-            travel_date=travel_date,
+            travel_date=selected_date,
         )
         # Clear session OTP variables after successful booking creation
         request.session.pop('booking_otp_verified', None)
@@ -346,6 +380,10 @@ def booking(request, id):
         "taxes": taxes,
         "total": total,
         "profile": profile,
+        "min_date": today.strftime('%Y-%m-%d'),
+        "max_date": three_weeks_later.strftime('%Y-%m-%d'),
+        "booked_dates_json": json.dumps([d.strftime('%Y-%m-%d') for d in booked_dates]),
+        "booked_dates_formatted": [d.strftime('%B %d, %Y') for d in booked_dates],
     }
     return render(request, "booking.html", context)
 

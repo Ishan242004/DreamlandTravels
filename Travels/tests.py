@@ -159,6 +159,9 @@ class TravelsE2ETestCase(TestCase):
         self.assertEqual(self.client.session.get('booking_otp_verified_email'), 'testuser@gmail.com')
 
     def test_booking_creation_protection(self):
+        from datetime import date, timedelta
+        valid_date_str = (date.today() + timedelta(days=5)).strftime('%Y-%m-%d')
+
         self.client.login(username='testuser', password='Testpassword123!')
         
         # Attempt to create booking without verified OTP
@@ -167,7 +170,7 @@ class TravelsE2ETestCase(TestCase):
             'full_name': 'Test User',
             'email': 'testuser@gmail.com',
             'phone': '9999999999',
-            'travel_date': '2026-10-15'
+            'travel_date': valid_date_str
         })
         # Should redirect back to booking page with error message due to lack of OTP validation
         self.assertEqual(response.status_code, 302)
@@ -186,7 +189,7 @@ class TravelsE2ETestCase(TestCase):
             'full_name': 'Test User',
             'email': 'testuser@gmail.com',
             'phone': '9999999999',
-            'travel_date': '2026-10-15'
+            'travel_date': valid_date_str
         })
         self.assertEqual(response.status_code, 302)
         
