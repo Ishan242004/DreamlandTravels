@@ -404,81 +404,164 @@ a {
 }
 
 /* =========================================================
-   Buttons
+   Buttons — Premium Gradient Blue Style
    ========================================================= */
-.btn-brand {
-  background: var(--gradient-ocean);
-  color: #fff;
+
+/* ------ Core gradient button mixin values ------ */
+:root {
+  --btn-gradient: linear-gradient(135deg, #1a5fb4 0%, #1e90d6 55%, #29b6e8 100%);
+  --btn-gradient-hover: linear-gradient(135deg, #155096 0%, #1680c0 55%, #1fa8d8 100%);
+  --btn-shadow: 0 4px 18px rgba(26, 95, 180, 0.38);
+  --btn-shadow-hover: 0 8px 28px rgba(26, 95, 180, 0.52);
+}
+
+/* ------ Primary Buttons (btn-brand & btn-accent share same look) ------ */
+.btn-brand,
+.btn-accent {
+  background: var(--btn-gradient);
+  color: #fff !important;
   border: none;
   border-radius: var(--radius-pill);
-  padding: 13px 30px;
+  padding: 13px 32px;
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.95rem;
-  letter-spacing: 0.01em;
-  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
-  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease), background 0.28s var(--ease);
+  box-shadow: var(--btn-shadow);
+  text-decoration: none;
 }
 
-.btn-brand:hover {
-  color: #fff;
+/* Subtle inner shine */
+.btn-brand::before,
+.btn-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.22) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  transition: left 0.5s var(--ease);
+  pointer-events: none;
+}
+
+.btn-brand:hover::before,
+.btn-accent:hover::before {
+  left: 110%;
+}
+
+.btn-brand:hover,
+.btn-accent:hover {
+  background: var(--btn-gradient-hover);
+  color: #fff !important;
   transform: translateY(-3px);
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--btn-shadow-hover);
 }
 
+.btn-brand:active,
+.btn-accent:active {
+  transform: translateY(-1px);
+  box-shadow: var(--btn-shadow);
+}
+
+/* ------ Outline Variant ------ */
 .btn-brand-outline {
   background: transparent;
-  border: 1.5px solid var(--color-primary);
+  border: 2px solid var(--color-primary);
   color: var(--color-primary);
   border-radius: var(--radius-pill);
-  padding: 12px 28px;
+  padding: 11px 28px;
+  font-family: var(--font-body);
   font-weight: 700;
-  transition: all 0.3s var(--ease);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.28s var(--ease);
+  text-decoration: none;
 }
 
 .btn-brand-outline:hover {
-  background: var(--color-primary);
+  background: var(--btn-gradient);
+  border-color: transparent;
   color: #fff;
   transform: translateY(-3px);
+  box-shadow: var(--btn-shadow);
 }
 
-.btn-accent {
-  background: var(--color-accent);
-  color: var(--color-primary-dark);
-  border: none;
-  border-radius: var(--radius-pill);
-  padding: 13px 30px;
-  font-weight: 700;
-  transition: all 0.3s var(--ease);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-accent:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  color: var(--color-primary-dark);
-}
-
+/* ------ Ghost Light (for dark/hero backgrounds) ------ */
 .btn-ghost-light {
   background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
   color: #fff;
   border-radius: var(--radius-pill);
   padding: 12px 28px;
   font-weight: 600;
-  backdrop-filter: blur(6px);
-  transition: all 0.3s var(--ease);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.28s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
 }
 
 .btn-ghost-light:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.85);
   color: #fff;
+  transform: translateY(-2px);
 }
 
+/* ------ Small pill ------ */
 .btn-sm-pill {
   border-radius: var(--radius-pill);
   padding: 6px 18px;
   font-weight: 600;
   font-size: 0.85rem;
+}
+
+/* ------ Bootstrap btn-primary & btn-success override ------ */
+.btn-primary {
+  background: var(--btn-gradient) !important;
+  border: none !important;
+  border-radius: var(--radius-pill) !important;
+  font-weight: 700 !important;
+  box-shadow: var(--btn-shadow) !important;
+  color: #fff !important;
+  transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease) !important;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--btn-shadow-hover) !important;
+}
+
+/* Ensure all btn-outline-brand is consistent */
+.btn-outline-brand {
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  transition: all 0.28s var(--ease);
+}
+
+.btn-outline-brand:hover {
+  background: var(--btn-gradient);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: var(--btn-shadow);
 }
 
 /* =========================================================
@@ -1244,8 +1327,9 @@ a {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: #fff;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   padding: 12px 16px;
+  transition: all 0.3s ease;
 }
 
 .auth-card .form-control::placeholder {
@@ -1254,9 +1338,38 @@ a {
 
 .auth-card .form-control:focus {
   background: rgba(255, 255, 255, 0.18);
-  border-color: var(--color-accent);
+  border-color: rgba(255, 255, 255, 0.8);
   box-shadow: none;
   color: #fff;
+}
+
+.auth-card .btn-brand,
+.auth-card .btn-accent {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #fff !important;
+  border-radius: 50px !important;
+  padding: 10px 16px !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+  letter-spacing: normal !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.auth-card .btn-brand::before,
+.auth-card .btn-accent::before {
+  display: none !important;
+}
+
+.auth-card .btn-brand:hover,
+.auth-card .btn-accent:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  transform: translateY(0) !important;
+  box-shadow: none !important;
 }
 
 .auth-card .form-check-label {

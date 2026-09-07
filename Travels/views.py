@@ -470,9 +470,6 @@ def get_dashboard_context(request, active_tab):
     total_spent = bookings.filter(status="Paid").aggregate(total=Sum("amount"))["total"] or Decimal("0.00")
     total_destinations = Package.objects.values("destination").distinct().count()
 
-    # Fetch messages and admin replies for current user
-    contact_messages = ContactMessage.objects.filter(user=request.user).order_by("-created_at")
-
     return {
         "bookings": bookings,
         "total_bookings": total_bookings,
@@ -480,7 +477,6 @@ def get_dashboard_context(request, active_tab):
         "completed_count": completed_count,
         "total_spent": total_spent,
         "profile": profile,
-        "contact_messages": contact_messages,
         "active_tab": active_tab,
         "today": today,
         "total_destinations": total_destinations,
@@ -506,10 +502,6 @@ def dashboard_history(request):
     return render(request, 'dashboard.html', context)
 
 @login_required(login_url="login")
-def dashboard_messages(request):
-    context = get_dashboard_context(request, 'messages')
-    return render(request, 'dashboard.html', context)
-
 @login_required(login_url="login")
 def dashboard_edit_profile(request):
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
@@ -575,8 +567,9 @@ def invoice(request, id):
 
     package = booking.package
     taxes = TAX_AMOUNT
-    subtotal = package.price * booking.persons
-    total = subtotal + taxes
+    total = booking.amount
+    subtotal = total - taxes
+    unit_price = subtotal / booking.persons if booking.persons else 0
 
     context = {
         "booking": booking,
@@ -584,6 +577,7 @@ def invoice(request, id):
         "subtotal": subtotal,
         "taxes": taxes,
         "total": total,
+        "unit_price": unit_price,
     }
     return render(request, "invoice.html", context)
 
@@ -1129,7 +1123,19 @@ def admin_reply_message(request, id):
             msg.status = "Replied"
             msg.replied_at = timezone.now()
             msg.save()
-            messages.success(request, f"Reply successfully sent to {msg.name}.")
+            
+            # Send Email to the user
+            try:
+                send_mail(
+                    subject=f"Reply to your query: {msg.subject} - Dreamland Travels",
+                    message=f"Hello {msg.name},\n\nRegarding your message:\n\"{msg.message}\"\n\nOur Reply:\n{reply_text}\n\nBest Regards,\nDreamland Travels Team",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[msg.email],
+                    fail_silently=False,
+                )
+                messages.success(request, f"Reply successfully sent to {msg.name} via email.")
+            except Exception as e:
+                messages.error(request, f"Reply saved, but failed to send email to {msg.name}. Error: {e}")
         else:
             messages.error(request, "Reply message cannot be empty.")
     return redirect("admin_contact_messages")

@@ -2,14 +2,16 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Messages | Dreamland Travels</title>
   <meta name="description" content="Manage and respond to traveler contact submissions.">
-{% comment %} <text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>"> {% endcomment %}
+  {% comment %} <text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>"> {% endcomment %}
   {% include "_headassets.html" %}
 </head>
+
 <body>
   <!-- Page Loader -->
   <div id="page-loader">
@@ -47,7 +49,8 @@
         </div>
         <div class="admin-top-actions">
           <div class="dropdown">
-            <button class="admin-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="admin-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               <span>Administrator</span>
               <i class="bi bi-chevron-down ms-1"></i>
             </button>
@@ -58,9 +61,13 @@
                   <small>Dreamland Travels</small>
                 </div>
               </li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="{% url 'admin_profile' %}"><i class="bi bi-person me-2"></i> Admin Profile</a></li>
-              <li><a class="dropdown-item logout-item" href="{% url 'user_logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="{% url 'admin_profile' %}"><i class="bi bi-person me-2"></i> Admin
+                  Profile</a></li>
+              <li><a class="dropdown-item logout-item" href="{% url 'user_logout' %}"><i
+                    class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
             </ul>
           </div>
         </div>
@@ -72,12 +79,12 @@
       </div>
 
       {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        {% endfor %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+      {% endfor %}
       {% endif %}
 
       <!-- Count Cards -->
@@ -121,34 +128,42 @@
       </div>
 
       <!-- Filters & Search -->
-      <div class="dash-panel mb-4 p-3">
-        <form method="GET" action="{% url 'admin_contact_messages' %}" class="row g-2 align-items-end">
-          <div class="col-md-5">
-            <label class="form-label small fw-semibold text-muted">Search Messages</label>
-            <div class="input-group input-group-sm">
-              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-              <input type="text" name="search" class="form-control border-start-0 bg-light" placeholder="Search by name, email, subject, message content..." value="{{ search_query }}">
+      <div class="dash-panel mb-4 p-3 bg-white shadow-sm rounded">
+        <form method="GET" action="{% url 'admin_contact_messages' %}" class="row g-3 align-items-end">
+          <div class="col-lg-5 col-md-12">
+            <label class="form-label small fw-bold text-muted mb-1">Search Messages</label>
+            <div class="input-group input-group-sm shadow-sm">
+              <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+              <input type="text" name="search" class="form-control border-start-0" placeholder="Search..." value="{{ search_query }}">
             </div>
           </div>
-          <div class="col-md-2">
-            <label class="form-label small fw-semibold text-muted">Status</label>
-            <select name="status" class="form-select form-select-sm bg-light">
-              <option value="">All Statuses</option>
-              <option value="Unread" {% if status_filter == "Unread" %}selected{% endif %}>Unread</option>
-              <option value="Read" {% if status_filter == "Read" %}selected{% endif %}>Read</option>
-              <option value="Replied" {% if status_filter == "Replied" %}selected{% endif %}>Replied</option>
-            </select>
+          <div class="col-lg-3 col-md-4">
+            <label class="form-label small fw-bold text-muted mb-1">Status</label>
+            <div class="input-group input-group-sm shadow-sm">
+              <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-ui-checks"></i></span>
+              <select name="status" class="form-select border-start-0">
+                <option value="">All Statuses</option>
+                <option value="Unread" {% if status_filter == "Unread" %}selected{% endif %}>Unread</option>
+                <option value="Read" {% if status_filter == "Read" %}selected{% endif %}>Read</option>
+                <option value="Replied" {% if status_filter == "Replied" %}selected{% endif %}>Replied</option>
+              </select>
+            </div>
           </div>
-          <div class="col-md-3">
-            <label class="form-label small fw-semibold text-muted">Sort By</label>
-            <select name="sort" class="form-select form-select-sm bg-light">
-              <option value="-created_at" {% if sort_by == "-created_at" %}selected{% endif %}>Newest First</option>
-              <option value="created_at" {% if sort_by == "created_at" %}selected{% endif %}>Oldest First</option>
-            </select>
+          <div class="col-lg-2 col-md-4">
+            <label class="form-label small fw-bold text-muted mb-1">Sort By</label>
+            <div class="input-group input-group-sm shadow-sm">
+              <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-sort-down"></i></span>
+              <select name="sort" class="form-select border-start-0">
+                <option value="-created_at" {% if sort_by == "-created_at" %}selected{% endif %}>Newest</option>
+                <option value="created_at" {% if sort_by == "created_at" %}selected{% endif %}>Oldest</option>
+              </select>
+            </div>
           </div>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-sm btn-brand px-3"><i class="bi bi-funnel-fill me-1"></i>Filter</button>
-            <a href="{% url 'admin_contact_messages' %}" class="btn btn-sm btn-light border px-2"><i class="bi bi-x-lg"></i></a>
+          <div class="col-lg-2 col-md-12 mt-3 mt-lg-0">
+            <div class="d-flex gap-2 justify-content-lg-end h-100 align-items-end">
+              <button type="submit" class="btn btn-sm btn-brand shadow-sm px-3 py-1 flex-grow-1"><i class="bi bi-funnel-fill me-1"></i>Filter</button>
+              <a href="{% url 'admin_contact_messages' %}" class="btn btn-sm btn-light border shadow-sm px-2 py-1"><i class="bi bi-x-lg"></i></a>
+            </div>
           </div>
         </form>
       </div>
@@ -170,164 +185,196 @@
             </thead>
             <tbody>
               {% for msg in messages_list %}
-                <tr class="{% if msg.status == 'Unread' %}table-light fw-bold{% endif %}">
-                  <td>MSG-{{ msg.id }}</td>
-                  <td>
-                    <div>{{ msg.name }}</div>
-                    <div class="small text-muted">{{ msg.email }}</div>
-                    {% if msg.phone %}<div class="small text-muted"><i class="bi bi-telephone me-1"></i>{{ msg.phone }}</div>{% endif %}
-                  </td>
-                  <td>{{ msg.subject }}</td>
-                  <td class="text-truncate" style="max-width: 250px;">{{ msg.message }}</td>
-                  <td>{{ msg.created_at|date:"M d, Y H:i" }}</td>
-                  <td>
+              <tr class="{% if msg.status == 'Unread' %}table-light fw-bold{% endif %}">
+                <td>MSG-{{ msg.id }}</td>
+                <td>
+                  <div>{{ msg.name }}</div>
+                  <div class="small text-muted">{{ msg.email }}</div>
+                  {% if msg.phone %}<div class="small text-muted"><i class="bi bi-telephone me-1"></i>{{ msg.phone }}
+                  </div>{% endif %}
+                </td>
+                <td>{{ msg.subject }}</td>
+                <td class="text-truncate" style="max-width: 250px;">{{ msg.message }}</td>
+                <td>{{ msg.created_at|date:"M d, Y H:i" }}</td>
+                <td>
+                  {% if msg.status == "Unread" %}
+                  <span class="badge bg-danger"><i class="bi bi-envelope-exclamation me-1"></i>Unread</span>
+                  {% elif msg.status == "Read" %}
+                  <span class="badge bg-primary"><i class="bi bi-envelope-open me-1"></i>Read</span>
+                  {% else %}
+                  <span class="badge bg-success"><i class="bi bi-reply-all me-1"></i>Replied</span>
+                  {% endif %}
+                </td>
+                <td class="text-end">
+                  <div class="d-flex justify-content-end gap-1">
+                    <button class="btn btn-sm btn-brand-outline btn-sm-pill" title="View Details" data-bs-toggle="modal"
+                      data-bs-target="#msgModal{{ msg.id }}">
+                      <i class="bi bi-eye"></i>
+                    </button>
+
                     {% if msg.status == "Unread" %}
-                      <span class="badge bg-danger"><i class="bi bi-envelope-exclamation me-1"></i>Unread</span>
-                    {% elif msg.status == "Read" %}
-                      <span class="badge bg-primary"><i class="bi bi-envelope-open me-1"></i>Read</span>
-                    {% else %}
-                      <span class="badge bg-success"><i class="bi bi-reply-all me-1"></i>Replied</span>
+                    <form method="POST" action="{% url 'mark_message_read' msg.id %}" class="d-inline">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-primary btn-sm-pill" title="Mark as Read">
+                        <i class="bi bi-envelope-open"></i>
+                      </button>
+                    </form>
                     {% endif %}
-                  </td>
-                  <td class="text-end">
-                    <div class="d-flex justify-content-end gap-1">
-                      <button class="btn btn-sm btn-brand-outline btn-sm-pill" 
-                              title="View Details"
-                              data-bs-toggle="modal" 
-                              data-bs-target="#msgModal{{ msg.id }}">
-                        <i class="bi bi-eye"></i>
+
+                    {% if msg.status != 'Replied' %}
+                    <button class="btn btn-sm btn-outline-success btn-sm-pill" title="Reply to Message"
+                      data-bs-toggle="modal" data-bs-target="#replyModal{{ msg.id }}">
+                      <i class="bi bi-reply"></i>
+                    </button>
+                    {% else %}
+                    <button class="btn btn-sm btn-success btn-sm-pill" title="View Reply"
+                      data-bs-toggle="modal" data-bs-target="#replyModal{{ msg.id }}">
+                      <i class="bi bi-check2-all"></i>
+                    </button>
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'delete_message' msg.id %}"
+                      onsubmit="return confirm('Delete this message permanently?');" class="d-inline">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-danger btn-sm-pill" title="Delete Message">
+                        <i class="bi bi-trash"></i>
                       </button>
+                    </form>
+                  </div>
 
-                      {% if msg.status == "Unread" %}
-                        <form method="POST" action="{% url 'mark_message_read' msg.id %}" class="d-inline">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-sm btn-outline-primary btn-sm-pill" title="Mark as Read">
-                            <i class="bi bi-envelope-open"></i>
-                          </button>
-                        </form>
-                      {% endif %}
-
-                      <button class="btn btn-sm btn-outline-success btn-sm-pill" 
-                              title="Reply to Message"
-                              data-bs-toggle="modal" 
-                              data-bs-target="#replyModal{{ msg.id }}">
-                        <i class="bi bi-reply"></i>
-                      </button>
-
-                      <form method="POST" action="{% url 'delete_message' msg.id %}" onsubmit="return confirm('Delete this message permanently?');" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-danger btn-sm-pill" title="Delete Message">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </form>
-                    </div>
-
-                    <!-- Reply Modal -->
-                    <div class="modal fade" id="replyModal{{ msg.id }}" tabindex="-1" aria-hidden="true" style="text-align: left;">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content border-0 shadow">
-                          <div class="modal-header bg-soft py-3">
-                            <h6 class="modal-title fw-bold"><i class="bi bi-reply me-2 text-primary"></i>Reply to Message - MSG-{{ msg.id }}</h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <form method="POST" action="{% url 'admin_reply_message' msg.id %}">
-                            {% csrf_token %}
-                            <div class="modal-body p-4 text-dark">
-                              <div class="mb-3">
-                                <strong>Reply to:</strong> <span class="text-dark">{{ msg.name }}</span>
-                              </div>
-                              <div class="mb-3">
-                                <strong>Email:</strong> <span class="text-dark">{{ msg.email }}</span>
-                              </div>
-                              <div class="mb-3">
-                                <strong>Original Message:</strong>
-                                <div class="p-2 bg-light rounded small mt-1 text-muted" style="max-height: 100px; overflow-y: auto; white-space: pre-wrap;">{{ msg.message }}</div>
-                              </div>
-                              {% if msg.reply_message %}
-                                <div class="mb-3">
-                                  <strong>Previous Reply:</strong>
-                                  <div class="p-2 bg-soft rounded small mt-1 text-ink-soft">{{ msg.reply_message }}</div>
-                                </div>
-                              {% endif %}
-                              <div class="mb-3">
-                                <label class="form-label fw-bold text-dark">Reply Message</label>
-                                <textarea name="reply_message" class="form-control" rows="4" placeholder="Type your reply message here..." required></textarea>
-                              </div>
-                            </div>
-                            <div class="modal-footer bg-light py-2">
-                              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-sm btn-brand"><i class="bi bi-send me-1"></i>Send Reply</button>
-                            </div>
-                          </form>
+                  <!-- Reply Modal -->
+                  <div class="modal fade" id="replyModal{{ msg.id }}" tabindex="-1" aria-hidden="true"
+                    style="text-align: left;">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-soft py-3">
+                          <h6 class="modal-title fw-bold"><i class="bi bi-reply me-2 text-primary"></i>Reply to Message
+                            - MSG-{{ msg.id }}</h6>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                      </div>
-                    </div>
-
-                    <!-- Details Modal -->
-                    <div class="modal fade" id="msgModal{{ msg.id }}" tabindex="-1" aria-hidden="true" style="text-align: left;">
-                      <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content border-0 shadow">
-                          <div class="modal-header bg-soft py-3">
-                            <h6 class="modal-title fw-bold"><i class="bi bi-envelope-open me-2 text-primary"></i>Message Details - MSG-{{ msg.id }}</h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body p-4">
-                            <div class="row g-3">
-                              <!-- Sender Meta Info -->
-                              <div class="col-md-4 border-end">
-                                <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Sender Info</h6>
-                                <div class="mb-2"><strong>Name:</strong> <div>{{ msg.name }}</div></div>
-                                <div class="mb-2"><strong>Email:</strong> <div><a href="mailto:{{ msg.email }}">{{ msg.email }}</a></div></div>
-                                <div class="mb-2"><strong>Phone:</strong> <div>{{ msg.phone|default:"Not provided" }}</div></div>
-                                <div class="mb-2"><strong>Submitted:</strong> <div>{{ msg.created_at|date:"F d, Y H:i:s" }}</div></div>
-                                {% comment %} <div class="mb-2"><strong>Status:</strong> 
-                                  <div>
-                                    {% if msg.status == "Unread" %}
-                                      <span class="badge bg-danger">Unread</span>
-                                    {% elif msg.status == "Read" %}
-                                      <span class="badge bg-primary">Read</span>
-                                    {% else %}
-                                      <span class="badge bg-success">Replied</span>
-                                    {% endif %}
-                                  </div>
-                                </div> {% endcomment %}
+                        <form method="POST" action="{% url 'admin_reply_message' msg.id %}">
+                          {% csrf_token %}
+                          <div class="modal-body p-4 text-dark">
+                            <div class="mb-3">
+                              <strong>Reply to:</strong> <span class="text-dark">{{ msg.name }}</span>
+                            </div>
+                            <div class="mb-3">
+                              <strong>Email:</strong> <span class="text-dark">{{ msg.email }}</span>
+                            </div>
+                            <div class="mb-3">
+                              <strong>Original Message:</strong>
+                              <div class="p-2 bg-light rounded small mt-1 text-muted"
+                                style="max-height: 100px; overflow-y: auto; white-space: pre-wrap;">{{ msg.message }}
                               </div>
-                              <!-- Message Subject & Body -->
-                              <div class="col-md-8 ps-md-4">
-                                <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Subject & Content</h6>
-                                <h5 class="fw-bold mb-3 text-dark">{{ msg.subject }}</h5>
-                                <div class="p-3 bg-light rounded-3 font-monospace text-secondary" style="white-space: pre-wrap; font-size: 0.9rem;">{{ msg.message }}</div>
-                              </div>
+                            </div>
+                            {% if msg.reply_message %}
+                            <div class="mb-3">
+                              <strong>Sent Reply:</strong>
+                              <div class="p-3 bg-light border border-success rounded small mt-1 text-dark">{{ msg.reply_message }}</div>
                             </div>
                           </div>
                           <div class="modal-footer bg-light py-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                            {% if msg.status == "Unread" %}
-                              <form method="POST" action="{% url 'mark_message_read' msg.id %}" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-primary">Mark as Read</button>
-                              </form>
-                            {% endif %}
-                            {% if msg.status != "Replied" %}
-                              {% comment %} <form method="POST" action="{% url 'mark_message_replied' msg.id %}" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-success"><i class="bi bi-reply me-1"></i>Mark as Replied</button>
-                              </form> {% endcomment %}
-                            {% endif %}
+                            <button type="button" class="btn btn-sm btn-outline-secondary"
+                              data-bs-dismiss="modal">Close</button>
                           </div>
+                            {% else %}
+                            <div class="mb-3">
+                              <label class="form-label fw-bold text-dark">Reply Message</label>
+                              <textarea name="reply_message" class="form-control" rows="4"
+                                placeholder="Type your reply message here..." required></textarea>
+                            </div>
+                          </div>
+                          <div class="modal-footer bg-light py-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary"
+                              data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-sm btn-brand"><i class="bi bi-send me-1"></i>Send
+                              Reply</button>
+                          </div>
+                            {% endif %}
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Details Modal -->
+                  <div class="modal fade" id="msgModal{{ msg.id }}" tabindex="-1" aria-hidden="true"
+                    style="text-align: left;">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                      <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-soft py-3">
+                          <h6 class="modal-title fw-bold"><i class="bi bi-envelope-open me-2 text-primary"></i>Message
+                            Details - MSG-{{ msg.id }}</h6>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                          <div class="row g-3">
+                            <!-- Sender Meta Info -->
+                            <div class="col-md-4 border-end">
+                              <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Sender Info</h6>
+                              <div class="mb-2"><strong>Name:</strong>
+                                <div>{{ msg.name }}</div>
+                              </div>
+                              <div class="mb-2"><strong>Email:</strong>
+                                <div><a href="mailto:{{ msg.email }}">{{ msg.email }}</a></div>
+                              </div>
+                              <div class="mb-2"><strong>Phone:</strong>
+                                <div>{{ msg.phone|default:"Not provided" }}</div>
+                              </div>
+                              <div class="mb-2"><strong>Submitted:</strong>
+                                <div>{{ msg.created_at|date:"F d, Y H:i:s" }}</div>
+                              </div>
+                              {% comment %} <div class="mb-2"><strong>Status:</strong>
+                                <div>
+                                  {% if msg.status == "Unread" %}
+                                  <span class="badge bg-danger">Unread</span>
+                                  {% elif msg.status == "Read" %}
+                                  <span class="badge bg-primary">Read</span>
+                                  {% else %}
+                                  <span class="badge bg-success">Replied</span>
+                                  {% endif %}
+                                </div>
+                              </div> {% endcomment %}
+                            </div>
+                            <!-- Message Subject & Body -->
+                            <div class="col-md-8 ps-md-4">
+                              <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Subject & Content</h6>
+                              <h5 class="fw-bold mb-3 text-dark">{{ msg.subject }}</h5>
+                              <div class="p-3 bg-light rounded-3 font-monospace text-secondary"
+                                style="white-space: pre-wrap; font-size: 0.9rem;">{{ msg.message }}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer bg-light py-2">
+                          <button type="button" class="btn btn-sm btn-outline-secondary"
+                            data-bs-dismiss="modal">Close</button>
+                          {% if msg.status == "Unread" %}
+                          <form method="POST" action="{% url 'mark_message_read' msg.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">Mark as Read</button>
+                          </form>
+                          {% endif %}
+                          {% if msg.status != "Replied" %}
+                          {% comment %} <form method="POST" action="{% url 'mark_message_replied' msg.id %}"
+                            class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-success"><i class="bi bi-reply me-1"></i>Mark as
+                              Replied</button>
+                          </form> {% endcomment %}
+                          {% endif %}
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                  </td>
-                </tr>
+                </td>
+              </tr>
               {% empty %}
-                <tr>
-                  <td colspan="6" class="text-center py-5 text-muted">
-                    <i class="bi bi-envelope fs-1 d-block mb-2"></i>
-                    No messages found matching criteria.
-                  </td>
-                </tr>
+              <tr>
+                <td colspan="6" class="text-center py-5 text-muted">
+                  <i class="bi bi-envelope fs-1 d-block mb-2"></i>
+                  No messages found matching criteria.
+                </td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -341,4 +388,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{% static 'js/main.js' %}"></script>
 </body>
+
 </html>

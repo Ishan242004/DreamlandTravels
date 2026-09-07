@@ -23,14 +23,15 @@
     }
 
     #filter-form .filter-pill {
-        height: 42px;
-        padding: 0 28px;
+        height: 44px;
+        padding: 0 24px;
         border: 1px solid #e0e7ef;
-        border-radius: 32px;
+        border-radius: 9px;
         background: #fff;
         color: #36516f;
-        font-size: 16px;
+        font-size: 15px;
         white-space: nowrap;
+        transition: all 0.2s ease;
     }
 
     #filter-form .filter-pill.active {
@@ -40,8 +41,9 @@
     }
 
     #filter-form .form-select {
-        height: 40px;
+        height: 44px;
         border-radius: 9px;
+        border: 1px solid #e0e7ef;
     }
   </style>
 </head>
@@ -89,6 +91,7 @@
               </select>
             </div>
             <div class="col-lg-4">
+              <label class="form-label d-none d-lg-block">&nbsp;</label>
               <div class="d-flex flex-wrap gap-2" data-filter-group>
                 <button type="button" class="filter-pill {% if not category or category == 'All' %}active{% endif %}" onclick="submitCategory('All')">All</button>
                 <button type="button" class="filter-pill {% if category == 'Beach' %}active{% endif %}" onclick="submitCategory('Beach')">Beach</button>

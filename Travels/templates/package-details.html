@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Santorini Escape — Package Details | Dreamland Travels</title>
+  <title>{{ package.package_name }} | Dreamland Travels</title>
   <meta name="description" content="Full itinerary, gallery, hotel and pricing details for the Santorini Escape package.">
 {% comment %} <text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>"> {% endcomment %}
   {% include "_headassets.html" %}
@@ -22,14 +22,17 @@
 
   {% include "_navbar.html" with active="packages" %}
 
-  <header class="page-header" style="background-image: linear-gradient(rgba(10,37,64,.4),rgba(10,37,64,.4)), url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=1800&auto=format&fit=crop');">
+  <header class="page-header" style="background-image: linear-gradient(rgba(10,37,64,.55), rgba(10,37,64,.65)), url('{{ package.image.url }}'); background-size: cover; background-position: center;">
     <div class="container content text-center">
       <div class="d-flex justify-content-center mb-3">
         <nav class="breadcrumb-dreamland">
-          <a href="{% url 'index' %}">Home</a> <i class="bi bi-chevron-right small"></i> <span class="active-crumb">Package Details</span>
+          <a href="{% url 'index' %}">Home</a> <i class="bi bi-chevron-right small"></i>
+          <a href="{% url 'packages' %}">Packages</a> <i class="bi bi-chevron-right small"></i>
+          <span class="active-crumb">{{ package.package_name }}</span>
         </nav>
       </div>
-      <h1>Package Details</h1>
+      <h1>{{ package.package_name }}</h1>
+      <p class="lead mt-2" style="color:rgba(255,255,255,.8); font-size:1rem;">{{ package.destination }} &nbsp;·&nbsp; {{ package.days }} Days / {{ package.nights }} Nights</p>
     </div>
   </header>
   <section class="section">

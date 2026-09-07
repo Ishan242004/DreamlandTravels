@@ -2,14 +2,16 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payments Management | Dreamland Travels</title>
   <meta name="description" content="Review and filter all booking payments.">
-{% comment %} <text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>"> {% endcomment %}
+  {% comment %} <text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>"> {% endcomment %}
   {% include "_headassets.html" %}
 </head>
+
 <body>
   <!-- Page Loader -->
   <div id="page-loader">
@@ -47,7 +49,8 @@
         </div>
         <div class="admin-top-actions">
           <div class="dropdown">
-            <button class="admin-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="admin-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               <span>Administrator</span>
               <i class="bi bi-chevron-down ms-1"></i>
             </button>
@@ -58,9 +61,13 @@
                   <small>Dreamland Travels</small>
                 </div>
               </li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="{% url 'admin_profile' %}"><i class="bi bi-person me-2"></i> Admin Profile</a></li>
-              <li><a class="dropdown-item logout-item" href="{% url 'user_logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="{% url 'admin_profile' %}"><i class="bi bi-person me-2"></i> Admin
+                  Profile</a></li>
+              <li><a class="dropdown-item logout-item" href="{% url 'user_logout' %}"><i
+                    class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
             </ul>
           </div>
         </div>
@@ -72,12 +79,12 @@
       </div>
 
       {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        {% endfor %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+      {% endfor %}
       {% endif %}
 
       <!-- Summary Cards -->
@@ -93,7 +100,8 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 flex-grow-1">
           <div class="stat-card reveal" style="background:var(--gradient-ocean);">
-            <div class="stat-ic" style="background:rgba(255,255,255,0.18);"><i class="bi bi-currency-dollar text-white"></i></div>
+            <div class="stat-ic" style="background:rgba(255,255,255,0.18);"><i
+                class="bi bi-currency-dollar text-white"></i></div>
             <div>
               <h3 class="text-white">₹{{ total_revenue }}</h3>
               <small class="text-white-50">Total Revenue</small>
@@ -130,62 +138,83 @@
       </div>
 
       <!-- Filters & Search -->
-      <div class="dash-panel mb-4 p-3">
-        <form method="GET" action="{% url 'admin_payments' %}" class="row g-2 align-items-end">
-          <div class="col-lg-4 col-md-6">
-            <label class="form-label small fw-semibold text-muted">Search Payments</label>
-            <div class="input-group input-group-sm">
-              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-              <input type="text" name="search" class="form-control border-start-0 bg-light" placeholder="TXN ID, name, email, booking..." value="{{ search_query }}">
+      <div class="dash-panel mb-4 p-3 bg-white shadow-sm rounded">
+        <form method="GET" action="{% url 'admin_payments' %}">
+          <div class="row g-3 mb-3">
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label small fw-bold text-muted mb-1">Search Payments</label>
+              <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                <input type="text" name="search" class="form-control border-start-0" placeholder="Search..." value="{{ search_query }}">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label small fw-bold text-muted mb-1">Payment Status</label>
+              <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-ui-checks"></i></span>
+                <select name="status" class="form-select border-start-0">
+                  <option value="">All Statuses</option>
+                  <option value="Successful" {% if status_filter == "Successful" %}selected{% endif %}>Successful</option>
+                  <option value="Pending" {% if status_filter == "Pending" %}selected{% endif %}>Pending</option>
+                  <option value="Failed" {% if status_filter == "Failed" %}selected{% endif %}>Failed</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label small fw-bold text-muted mb-1">Payment Method</label>
+              <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-credit-card"></i></span>
+                <select name="method" class="form-select border-start-0">
+                  <option value="">All Methods</option>
+                  <option value="Credit Card" {% if method_filter == "Credit Card" %}selected{% endif %}>Credit Card</option>
+                  <option value="Debit Card" {% if method_filter == "Debit Card" %}selected{% endif %}>Debit Card</option>
+                  <option value="UPI" {% if method_filter == "UPI" %}selected{% endif %}>UPI</option>
+                  <option value="Net Banking" {% if method_filter == "Net Banking" %}selected{% endif %}>Net Banking</option>
+                  <option value="Wallet" {% if method_filter == "Wallet" %}selected{% endif %}>Wallet</option>
+                  <option value="Razorpay" {% if method_filter == "Razorpay" %}selected{% endif %}>Razorpay</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label small fw-bold text-muted mb-1">Filter by Package</label>
+              <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-box"></i></span>
+                <select name="package" class="form-select border-start-0">
+                  <option value="">All Packages</option>
+                  {% for p in packages %}
+                  <option value="{{ p.id }}" {% if package_filter == p.id|stringformat:"i" %}selected{% endif %}>{{ p.package_name|truncatechars:20 }}</option>
+                  {% endfor %}
+                </select>
+              </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-3 col-sm-6">
-            <label class="form-label small fw-semibold text-muted">Payment Status</label>
-            <select name="status" class="form-select form-select-sm bg-light">
-              <option value="">All Statuses</option>
-              <option value="Successful" {%  if status_filter == "Successful" %}selected{% endif %}>Successful</option>
-              <option value="Pending" {% if status_filter == "Pending" %}selected{% endif %}>Pending</option>
-              <option value="Failed" {% if status_filter == "Failed" %}selected{% endif %}>Failed</option>
-            </select>
-          </div>
-          <div class="col-lg-3 col-md-3 col-sm-6">
-            <label class="form-label small fw-semibold text-muted">Payment Method</label>
-            <select name="method" class="form-select form-select-sm bg-light">
-              <option value="">All Methods</option>
-              <option value="Credit Card" {% if method_filter == "Credit Card" %}selected{% endif %}>Credit Card</option>
-              <option value="Debit Card" {% if method_filter == "Debit Card" %}selected{% endif %}>Debit Card</option>
-              <option value="UPI" {% if method_filter == "UPI" %}selected{% endif %}>UPI</option>
-              <option value="Net Banking" {% if method_filter == "Net Banking" %}selected{% endif %}>Net Banking</option>
-              <option value="Wallet" {% if method_filter == "Wallet" %}selected{% endif %}>Wallet</option>
-              <option value="Razorpay" {% if method_filter == "Razorpay" %}selected{% endif %}>Razorpay</option>
-            </select>
-          </div>
-          <div class="col-lg-2 col-md-4 col-sm-6">
-            <label class="form-label small fw-semibold text-muted">Filter by Package</label>
-            <select name="package" class="form-select form-select-sm bg-light">
-              <option value="">All Packages</option>
-              {% for p in packages %}
-                <option value="{{ p.id }}" {% if package_filter == p.id|stringformat:"i" %}selected{% endif %}>{{ p.package_name }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-lg-1.5 col-md-4 col-sm-6 flex-grow-1">
-            <label class="form-label small fw-semibold text-muted">Payment Date</label>
-            <input type="date" name="date" class="form-control form-select-sm bg-light" value="{{ date_filter }}">
-          </div>
-          <div class="col-lg-1.5 col-md-4 col-sm-6 flex-grow-1">
-            <label class="form-label small fw-semibold text-muted">Sort By</label>
-            <select name="sort" class="form-select form-select-sm bg-light">
-              <option value="-created_at" {% if sort_by == "-created_at" %}selected{% endif %}>Newest First</option>
-              <option value="created_at" {% if sort_by == "created_at" %}selected{% endif %}>Oldest First</option>
-              <option value="-amount" {% if sort_by == "-amount" %}selected{% endif %}>Amount: High to Low</option>
-              <option value="amount" {% if sort_by == "amount" %}selected{% endif %}>Amount: Low to High</option>
-              <option value="-booking__id" {% if sort_by == "-booking__id" %}selected{% endif %}>Booking ID: Desc</option>
-            </select>
-          </div>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-sm btn-brand px-3"><i class="bi bi-funnel-fill me-1"></i>Filter</button>
-            <a href="{% url 'admin_payments' %}" class="btn btn-sm btn-light border px-2"><i class="bi bi-x-lg"></i></a>
+          
+          <div class="row g-3 align-items-end">
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label small fw-bold text-muted mb-1">Payment Date</label>
+              <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-calendar"></i></span>
+                <input type="date" name="date" class="form-control border-start-0 px-2" value="{{ date_filter }}">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label small fw-bold text-muted mb-1">Sort By</label>
+              <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-sort-down"></i></span>
+                <select name="sort" class="form-select border-start-0">
+                  <option value="-created_at" {% if sort_by == "-created_at" %}selected{% endif %}>Newest</option>
+                  <option value="created_at" {% if sort_by == "created_at" %}selected{% endif %}>Oldest</option>
+                  <option value="-amount" {% if sort_by == "-amount" %}selected{% endif %}>Amount High</option>
+                  <option value="amount" {% if sort_by == "amount" %}selected{% endif %}>Amount Low</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-12">
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-brand shadow-sm px-3 py-1 flex-grow-1"><i class="bi bi-funnel-fill me-1"></i>Filter</button>
+                <a href="{% url 'admin_payments' %}" class="btn btn-sm btn-light border shadow-sm px-2 py-1"><i class="bi bi-x-lg"></i></a>
+              </div>
+            </div>
           </div>
         </form>
       </div>
@@ -209,128 +238,133 @@
             </thead>
             <tbody>
               {% for p in payments %}
-                <tr>
-                  <td class="fw-semibold">DT-{{ p.booking.id }}</td>
-                  <td class="text-truncate" style="max-width: 150px;">{{ p.transaction_id }}</td>
-                  <td>
-                    <div class="fw-semibold">{{ p.booking.full_name }}</div>
-                    <small class="text-muted">{{ p.booking.email }}</small>
-                  </td>
-                  <td>{{ p.booking.package.package_name }}</td>
-                  <td class="fw-bold">₹{{ p.amount }}</td>
-                  <td><span class="badge bg-light text-dark border">{{ p.payment_method }}</span></td>
-                  <td>
-                    {% if p.status == "Successful" %}
-                      <span class="badge-status badge-approved"><i class="bi bi-check-circle-fill me-1"></i>Successful</span>
-                    {% elif p.status == "Pending" %}
-                      <span class="badge-status badge-pending"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
-                    {% else %}
-                      <span class="badge-status badge-cancelled"><i class="bi bi-x-circle-fill me-1"></i>Failed</span>
-                    {% endif %}
-                  </td>
-                  <td>{{ p.created_at|date:"M d, Y H:i" }}</td>
-                  <td class="text-end">
-                    <div class="d-flex justify-content-end gap-1">
-                      <button class="btn btn-sm btn-brand-outline btn-sm-pill" 
-                              title="View Details"
-                              data-bs-toggle="modal" 
-                              data-bs-target="#paymentModal{{ p.id }}">
-                        <i class="bi bi-eye"></i>
-                      </button>
-                      <a href="{% url 'invoice' p.booking.id %}" class="btn btn-sm btn-brand btn-sm-pill" title="View Invoice">
-                        <i class="bi bi-receipt"></i>
-                      </a>
-                      <button class="btn btn-sm btn-danger btn-sm-pill" 
-                              title="Delete Payment"
-                              data-bs-toggle="modal" 
-                              data-bs-target="#deletePaymentModal{{ p.id }}">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                    </div>
+              <tr>
+                <td class="fw-semibold">DT-{{ p.booking.id }}</td>
+                <td class="text-truncate" style="max-width: 150px;">{{ p.transaction_id }}</td>
+                <td>
+                  <div class="fw-semibold">{{ p.booking.full_name }}</div>
+                  <small class="text-muted">{{ p.booking.email }}</small>
+                </td>
+                <td>{{ p.booking.package.package_name }}</td>
+                <td class="fw-bold">₹{{ p.amount }}</td>
+                <td><span class="badge bg-light text-dark border">{{ p.payment_method }}</span></td>
+                <td>
+                  {% if p.status == "Successful" %}
+                  <span class="badge-status badge-approved"><i
+                      class="bi bi-check-circle-fill me-1"></i>Successful</span>
+                  {% elif p.status == "Pending" %}
+                  <span class="badge-status badge-pending"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                  {% else %}
+                  <span class="badge-status badge-cancelled"><i class="bi bi-x-circle-fill me-1"></i>Failed</span>
+                  {% endif %}
+                </td>
+                <td>{{ p.created_at|date:"M d, Y H:i" }}</td>
+                <td class="text-end">
+                  <div class="d-flex justify-content-end gap-1">
+                    <button class="btn btn-sm btn-brand-outline btn-sm-pill" title="View Details" data-bs-toggle="modal"
+                      data-bs-target="#paymentModal{{ p.id }}">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <a href="{% url 'invoice' p.booking.id %}" class="btn btn-sm btn-brand btn-sm-pill"
+                      title="View Invoice">
+                      <i class="bi bi-receipt"></i>
+                    </a>
+                    <button class="btn btn-sm btn-danger btn-sm-pill" title="Delete Payment" data-bs-toggle="modal"
+                      data-bs-target="#deletePaymentModal{{ p.id }}">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
 
-                    <!-- Details Modal -->
-                    <div class="modal fade" id="paymentModal{{ p.id }}" tabindex="-1" aria-hidden="true" style="text-align: left;">
-                      <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content border-0 shadow">
-                          <div class="modal-header bg-soft py-3">
-                            <h6 class="modal-title fw-bold"><i class="bi bi-credit-card me-2 text-primary"></i>Transaction Details - DT-{{ p.booking.id }}</h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <!-- Details Modal -->
+                  <div class="modal fade" id="paymentModal{{ p.id }}" tabindex="-1" aria-hidden="true"
+                    style="text-align: left;">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                      <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-soft py-3">
+                          <h6 class="modal-title fw-bold"><i class="bi bi-credit-card me-2 text-primary"></i>Transaction
+                            Details - DT-{{ p.booking.id }}</h6>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                          <div class="row g-3">
+                            <!-- Transaction Column -->
+                            <div class="col-md-6 border-end">
+                              <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Transaction Details</h6>
+                              <div class="mb-2"><strong>Transaction ID:</strong> <span class="font-monospace">{{ p.transaction_id }}</span></div>
+                              <div class="mb-2"><strong>Invoice Number:</strong> <span>INV-{{ p.booking.id }}</span></div>
+                              <div class="mb-2"><strong>Amount Paid:</strong> <span class="fs-5 fw-bold text-primary-brand">₹{{ p.amount }}</span></div>
+                              <div class="mb-2"><strong>Payment Method:</strong> <span>{{ p.payment_method }}</span></div>
+                              <div class="mb-2"><strong>Payment Status:</strong>
+                                {% if p.status == "Successful" %}
+                                <span class="badge bg-success">Successful</span>
+                                {% elif p.status == "Pending" %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                                {% elif p.status == "Failed" %}
+                                <span class="badge bg-danger">Failed</span>
+                                {% endif %}
+                              </div>
+                              <div class="mb-2"><strong>Payment Date:</strong> <span>{{ p.created_at|date:"F d, Y H:i:s" }}</span></div>
+                            </div>
+                            <!-- Booking/User Column -->
+                            <div class="col-md-6 ps-md-4">
+                              <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Booking & Customer
+                                Details</h6>
+                              <div class="mb-2"><strong>Customer Name:</strong> <span>{{ p.booking.full_name }}</span></div>
+                              <div class="mb-2"><strong>Email Address:</strong> <span>{{ p.booking.email }}</span></div>
+                              <div class="mb-2"><strong>Phone Number:</strong> <span>{{ p.booking.phone }}</span></div>
+                              <div class="mb-2"><strong>Package Name:</strong> <span>{{ p.booking.package.package_name }}</span></div>
+                              <div class="mb-2"><strong>Destination:</strong> <span>{{ p.booking.package.destination }}</span></div>
+                              <div class="mb-2"><strong>Travelers:</strong> <span>{{ p.booking.persons }} Person(s)</span></div>
+                              <div class="mb-2"><strong>Travel Date:</strong> <span>{{ p.booking.travel_date|date:"F d, Y"|default:"Not specified" }}</span></div>
+                              <div class="mb-2"><strong>Booking Status:</strong> <span class="badge bg-secondary">{{ p.booking.status }}</span></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer bg-light py-2">
+                          <button type="button" class="btn btn-sm btn-outline-secondary"
+                            data-bs-dismiss="modal">Close</button>
+                          <a href="{% url 'invoice' p.booking.id %}" target="_blank" class="btn btn-sm btn-brand">
+                            <i class="bi bi-printer me-1"></i> Print Invoice
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Delete Payment Modal -->
+                  <div class="modal fade" id="deletePaymentModal{{ p.id }}" tabindex="-1"
+                    aria-labelledby="deletePaymentModalLabel{{ p.id }}" aria-hidden="true" style="text-align: left;">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content border-0 shadow">
+                        <form method="POST" action="{% url 'admin_payment_delete' p.id %}">
+                          {% csrf_token %}
+                          <div class="modal-header bg-danger text-white py-3">
+                            <h6 class="modal-title fw-bold text-white"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm Delete Payment</h6>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                              aria-label="Close"></button>
                           </div>
                           <div class="modal-body p-4">
-                            <div class="row g-3">
-                              <!-- Transaction Column -->
-                              <div class="col-md-6 border-end">
-                                <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Transaction Details</h6>
-                                <div class="mb-2"><strong>Transaction ID:</strong> <span class="font-monospace">{{ p.transaction_id }}</span></div>
-                                <div class="mb-2"><strong>Invoice Number:</strong> <span>INV-{{ p.booking.id }}</span></div>
-                                <div class="mb-2"><strong>Amount Paid:</strong> <span class="fs-5 fw-bold text-primary-brand">₹{{ p.amount }}</span></div>
-                                <div class="mb-2"><strong>Payment Method:</strong> <span>{{ p.payment_method }}</span></div>
-                                <div class="mb-2"><strong>Payment Status:</strong> 
-                                  {% if p.status == "Successful" %}
-                                    <span class="badge bg-success">Successful</span>
-                                  {% elif p.status == "Pending" %}
-                                    <span class="badge bg-warning text-dark">Pending</span>
-                                  {% else %}
-                                    <span class="badge bg-danger">Failed</span>
-                                  {% endif %}
-                                </div>
-                                <div class="mb-2"><strong>Payment Date:</strong> <span>{{ p.created_at|date:"F d, Y H:i:s" }}</span></div>
-                              </div>
-                              <!-- Booking/User Column -->
-                              <div class="col-md-6 ps-md-4">
-                                <h6 class="text-uppercase text-primary-brand small fw-bold mb-3">Booking & Customer Details</h6>
-                                <div class="mb-2"><strong>Customer Name:</strong> <span>{{ p.booking.full_name }}</span></div>
-                                <div class="mb-2"><strong>Email Address:</strong> <span>{{ p.booking.email }}</span></div>
-                                <div class="mb-2"><strong>Phone Number:</strong> <span>{{ p.booking.phone }}</span></div>
-                                <div class="mb-2"><strong>Package Name:</strong> <span>{{ p.booking.package.package_name }}</span></div>
-                                <div class="mb-2"><strong>Destination:</strong> <span>{{ p.booking.package.destination }}</span></div>
-                                <div class="mb-2"><strong>Travelers:</strong> <span>{{ p.booking.persons }} Person(s)</span></div>
-                                <div class="mb-2"><strong>Travel Date:</strong> <span>{{ p.booking.travel_date|date:"F d, Y"|default:"Not specified" }}</span></div>
-                                <div class="mb-2"><strong>Booking Status:</strong> <span class="badge bg-secondary">{{ p.booking.status }}</span></div>
-                              </div>
-                            </div>
+                            <p class="mb-0">Are you sure you want to delete this payment (Transaction ID: <strong>{{ p.transaction_id }}</strong>)? This action cannot be undone.</p>
                           </div>
                           <div class="modal-footer bg-light py-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                            <a href="{% url 'invoice' p.booking.id %}" target="_blank" class="btn btn-sm btn-brand">
-                              <i class="bi bi-printer me-1"></i> Print Invoice
-                            </a>
+                            <button type="button" class="btn btn-sm btn-outline-secondary"
+                              data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-danger">Delete Payment</button>
                           </div>
-                        </div>
+                        </form>
                       </div>
                     </div>
+                  </div>
 
-                    <!-- Delete Payment Modal -->
-                    <div class="modal fade" id="deletePaymentModal{{ p.id }}" tabindex="-1" aria-labelledby="deletePaymentModalLabel{{ p.id }}" aria-hidden="true" style="text-align: left;">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content border-0 shadow">
-                          <form method="POST" action="{% url 'admin_payment_delete' p.id %}">
-                            {% csrf_token %}
-                            <div class="modal-header bg-danger text-white py-3">
-                              <h6 class="modal-title fw-bold text-white"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm Delete Payment</h6>
-                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body p-4">
-                              <p class="mb-0">Are you sure you want to delete this payment (Transaction ID: <strong>{{ p.transaction_id }}</strong>)? This action cannot be undone.</p>
-                            </div>
-                            <div class="modal-footer bg-light py-2">
-                              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                              <button type="submit" class="btn btn-sm btn-danger">Delete Payment</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-
-                  </td>
-                </tr>
+                </td>
+              </tr>
               {% empty %}
-                <tr>
-                  <td colspan="9" class="text-center py-5 text-muted">
-                    <i class="bi bi-credit-card fs-1 d-block mb-2"></i>
-                    No payments found matching the criteria.
-                  </td>
-                </tr>
+              <tr>
+                <td colspan="9" class="text-center py-5 text-muted">
+                  <i class="bi bi-credit-card fs-1 d-block mb-2"></i>
+                  No payments found matching the criteria.
+                </td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -344,4 +378,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{% static 'js/main.js' %}"></script>
 </body>
+
 </html>

@@ -23,16 +23,20 @@
 
   {% include "_navbar.html" with active="packages" solid=True %}
 
-  <header class="page-header" style="background-image: linear-gradient(rgba(10,37,64,.4),rgba(10,37,64,.4)), url('https://images.unsplash.com/photo-1499591934245-40b55745b905?q=80&w=1800&auto=format&fit=crop');">
+  <header class="page-header" style="background-image: linear-gradient(rgba(10,37,64,.55), rgba(10,37,64,.65)), url('{{ package.image.url }}'); background-size: cover; background-position: center;">
     <div class="container content text-center">
       <div class="d-flex justify-content-center mb-3">
         <nav class="breadcrumb-dreamland">
-          <a href="{% url 'index' %}">Home</a> <i class="bi bi-chevron-right small"></i> <span class="active-crumb">Book Your Trip</span>
+          <a href="{% url 'index' %}">Home</a> <i class="bi bi-chevron-right small"></i>
+          <a href="{% url 'package_details' package.id %}">{{ package.package_name }}</a> <i class="bi bi-chevron-right small"></i>
+          <span class="active-crumb">Book Your Trip</span>
         </nav>
       </div>
       <h1>Book Your Trip</h1>
+      <p class="lead mt-2" style="color:rgba(255,255,255,.8); font-size:1rem;">{{ package.package_name }} &nbsp;&middot;&nbsp; {{ package.destination }}</p>
     </div>
   </header>
+
   <section class="section">
     <div class="container">
       <div class="row g-4">

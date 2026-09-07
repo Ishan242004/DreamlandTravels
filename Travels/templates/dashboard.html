@@ -250,9 +250,7 @@
                   <a href="{% url 'dashboard_history' %}" class="btn btn-outline-brand {% if active_tab == 'history' %}active{% endif %}">
                     <i class="bi bi-clock-history me-1"></i> Booking History
                   </a>
-                  <a href="{% url 'dashboard_messages' %}" class="btn btn-outline-brand {% if active_tab == 'messages' %}active{% endif %}">
-                    <i class="bi bi-chat-left-text me-1"></i> Messages
-                  </a>
+
                   <a href="{% url 'dashboard_edit_profile' %}" class="btn btn-outline-brand {% if active_tab == 'edit' %}active{% endif %}">
                     <i class="bi bi-pencil-square me-1"></i> Edit Profile
                   </a>
@@ -552,55 +550,6 @@
               {% endfor %}
             </div>
 
-          <!-- TAB 5: MESSAGES (Admin Replies to Contact Messages) -->
-          {% elif active_tab == 'messages' %}
-            <div class="reveal">
-              <h5 class="mb-4 text-primary-brand"><i class="bi bi-chat-left-text text-secondary-brand me-2"></i>My Messages &amp; Replies</h5>
-              
-              {% for msg in contact_messages %}
-                <div class="surface-card p-4 mb-4 reveal" style="border-left: 5px solid {% if msg.reply_message %}var(--color-primary){% else %}var(--color-accent){% endif %}; box-shadow: var(--shadow-sm); border-radius: 0 var(--radius-md) var(--radius-md) 0;">
-                  <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
-                    <div>
-                      <span class="eyebrow text-uppercase fw-semibold text-secondary-brand" style="font-size: 0.72rem; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Subject: {{ msg.subject }}</span>
-                      <h4 class="mb-1 text-primary-brand fw-bold" style="font-size: 1.15rem;">{{ msg.subject }}</h4>
-                      <small class="text-muted d-block"><i class="bi bi-clock me-1"></i>Sent on: {{ msg.created_at|date:"d M Y H:i" }}</small>
-                    </div>
-                    <div>
-                      {% if msg.reply_message %}
-                        <span class="badge bg-success px-3 py-2 rounded-pill small"><i class="bi bi-check2-all me-1"></i>Replied</span>
-                      {% else %}
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill small"><i class="bi bi-hourglass-split me-1"></i>Pending Reply</span>
-                      {% endif %}
-                    </div>
-                  </div>
-                  
-                  <div class="mb-3 p-3 bg-light rounded border">
-                    <span class="d-block text-uppercase fw-bold text-ink-soft mb-2" style="font-size:0.68rem; letter-spacing:0.05em;">My Original Message</span>
-                    <p class="mb-0 text-secondary" style="font-size:0.92rem; white-space:pre-wrap;">{{ msg.message }}</p>
-                  </div>
-                  
-                  {% if msg.reply_message %}
-                  <div class="p-3 rounded" style="background: rgba(15,76,129,0.05); border: 1px solid rgba(15,76,129,0.1);">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                      <span class="text-uppercase fw-bold text-primary-brand" style="font-size:0.68rem; letter-spacing:0.05em;"><i class="bi bi-reply-fill me-1"></i>Admin Reply</span>
-                      <span class="text-muted small"><i class="bi bi-calendar-check me-1"></i>Replied on: {{ msg.replied_at|date:"d M Y H:i" }}</span>
-                    </div>
-                    <p class="mb-0 text-ink" style="font-size:0.95rem; white-space:pre-wrap; line-height:1.5;">{{ msg.reply_message }}</p>
-                  </div>
-                  {% else %}
-                  <div class="p-3 rounded bg-light border border-dashed text-center">
-                    <p class="mb-0 text-muted small"><i class="bi bi-hourglass-split me-1"></i>Our administration team will reply to your inquiry shortly.</p>
-                  </div>
-                  {% endif %}
-                </div>
-              {% empty %}
-                <div class="surface-card p-5 text-center reveal">
-                  <i class="bi bi-chat-left-dots display-4 text-muted mb-3 d-inline-block"></i>
-                  <h5>No messages yet</h5>
-                  <p class="text-muted">You do not have any replies or messages from administration yet.</p>
-                </div>
-              {% endfor %}
-            </div>
 
           <!-- TAB 4: EDIT PROFILE FORM -->
           {% elif active_tab == 'edit' %}

@@ -18,7 +18,7 @@ urlpatterns = [
     path('dashboard/edit-profile/', views.dashboard_edit_profile, name='dashboard_edit_profile'),
     path('dashboard/bookings/', views.dashboard_bookings, name='dashboard_bookings'),
     path('dashboard/history/', views.dashboard_history, name='dashboard_history'),
-    path('dashboard/messages/', views.dashboard_messages, name='dashboard_messages'),
+
     path('invoice/<int:id>/', views.invoice, name='invoice'),
     path('manage-bookings/', views.manage_bookings, name='manage_bookings'),
     path('manage-packages/', views.manage_packages, name='manage_packages'),
