@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: dreamland-travels
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn DreamlandTravels.wsgi:application"
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,localhost,127.0.0.1"
